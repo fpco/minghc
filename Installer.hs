@@ -11,7 +11,7 @@ installer :: String -> String
 installer versionGHC = nsis $ do
     name $ fromString $ "MinGHC-" ++ versionGHC
     outFile $ fromString $ "minghc-" ++ versionGHC ++ ".exe"
-    installDir "$PROGRAMFILES/LTSHaskell"
+    installDir $ fromString $ "$PROGRAMFILES/MinGHC-" ++ versionGHC
     requestExecutionLevel User
 
     page Directory
