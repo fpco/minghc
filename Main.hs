@@ -13,7 +13,7 @@ main :: IO ()
 main = do
     createDirectoryIfMissing True ".build"
     setCurrentDirectory ".build"
-    shake shakeOptions $ do
+    shakeArgs shakeOptions $ do
         want ["ltshaskell.exe"]
 
         "cabal-*.tar.gz" %> \out -> do
