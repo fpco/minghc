@@ -36,9 +36,9 @@ installer versionGHC = nsis $ do
         -- Should use HKLM instead of HKCU for all but APPDATA.
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
+        mapM_ (setEnvVarPrepend HKCU "PATH") path
 
     section "Add to PATH" [Description "Put GHC, Cabal and MSYS on the %PATH%"] $ do
-        mapM_ (setEnvVarAppend HKCU "PATH") path
 
     uninstall $ do
         rmdir [Recursive] "$INSTDIR"
