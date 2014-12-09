@@ -15,6 +15,12 @@ installer = nsis $ do
     page Directory
     page InstFiles
 
+    let path = ["$APPDATA/cabal/bin"
+               ,"$INSTDIR/ghc-7.8.3/bin"
+               ,"$INSTDIR/ghc-7.8.3/mingw/bin"
+               ,"$INSTDIR/cabal-1.20.0.3/bin"
+               ,"$INSTDIR/msys-1.0/bin"]
+
     section "" [] $ do
         setOutPath "$INSTDIR"        -- Where to install files in this section
         writeUninstaller "uninstall.exe"
@@ -27,16 +33,8 @@ installer = nsis $ do
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
 
-        setEnvVarAppend HKCU "PATH" "$APPDATA/cabal/bin"
-        setEnvVarAppend HKCU "PATH" "$INSTDIR/ghc-7.8.3/bin"
-        setEnvVarAppend HKCU "PATH" "$INSTDIR/ghc-7.8.3/mingw/bin"
-        setEnvVarAppend HKCU "PATH" "$INSTDIR/cabal-1.20.0.3/bin"
-        setEnvVarAppend HKCU "PATH" "$INSTDIR/msys-1.0/bin"
+        mapM_ (setEnvVarAppend HKCU "PATH") path
 
     uninstall $ do
         rmdir [Recursive] "$INSTDIR"
-        setEnvVarRemove HKCU "PATH" "$INSTDIR/msys-1.0/bin"
-        setEnvVarRemove HKCU "PATH" "$INSTDIR/cabal-1.20.0.3/bin"
-        setEnvVarRemove HKCU "PATH" "$INSTDIR/ghc-7.8.3/mingw/bin"
-        setEnvVarRemove HKCU "PATH" "$INSTDIR/ghc-7.8.3/bin"
-        setEnvVarRemove HKCU "PATH" "$APPDATA/cabal/bin"
+        mapM_ (setEnvVarRemove HKCU "PATH") path
