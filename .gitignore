@@ -1,6 +1,1 @@
-*.swp
-cabal-1.20.0.3-i386-unknown-mingw32.tar.gz
-cabal-1.20
-ghc-7.8.3-i386-unknown-mingw32.tar.xz
-ghc-7.8.3
-msys-1.0
+/.build/
