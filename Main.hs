@@ -59,4 +59,5 @@ main = do
             cmd "makensis" [out -<.> "nsi"]
 
         "minghc-*.nsi" %> \out -> do
+            need ["../Installer.hs"]
             writeFile' out $ installer $ version out
