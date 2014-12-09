@@ -56,7 +56,7 @@ main = do
         "minghc-*.exe" %> \out -> do
             let ver = version out
             need [out -<.> "nsi",".cabal-" ++ versionCabal,".ghc-" ++ ver,".msys-" ++ versionMSYS]
-            cmd "makensis" [out -<.> "nsi"]
+            cmd "makensis /V3" [out -<.> "nsi"]
 
         "minghc-*.nsi" %> \out -> do
             need ["../Installer.hs"]
