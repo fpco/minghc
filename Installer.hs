@@ -14,6 +14,7 @@ installer versionGHC = nsis $ do
     installDir $ fromString $ "$PROGRAMFILES/MinGHC-" ++ versionGHC
     requestExecutionLevel User
 
+    page Components
     page Directory
     page InstFiles
 
@@ -24,7 +25,7 @@ installer versionGHC = nsis $ do
             ,"$INSTDIR/cabal-" ++ versionCabal ++ "/bin"
             ,"$INSTDIR/msys-" ++ versionMSYS ++ "/bin"]
 
-    section "" [] $ do
+    section "Install" [Required, Description "Install GHC, Cabal and MSYS"] $ do
         setOutPath "$INSTDIR"        -- Where to install files in this section
         writeUninstaller "uninstall.exe"
 
@@ -36,6 +37,7 @@ installer versionGHC = nsis $ do
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
 
+    section "Add to PATH" [Description "Put GHC, Cabal and MSYS on the %PATH%"] $ do
         mapM_ (setEnvVarAppend HKCU "PATH") path
 
     uninstall $ do
