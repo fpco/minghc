@@ -8,6 +8,7 @@ import System.Directory
 import Data.List.Extra
 import System.Directory
 import Installer
+import Config
 
 main :: IO ()
 main = do
@@ -48,7 +49,7 @@ main = do
             cmd "unzip" ["../msys-" ++ ver ++ ".zip"]
 
         "ltshaskell.exe" %> \out -> do
-            need ["ltshaskell.nsi",".cabal-1.20.0.3",".ghc-7.8.3",".msys-1.0"]
+            need ["ltshaskell.nsi",".cabal-" ++ versionCabal,".ghc-" ++ versionGHC,".msys-" ++ versionMSYS]
             cmd "makensis ltshaskell.nsi"
 
         "ltshaskell.nsi" %> \out -> do

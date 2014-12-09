@@ -2,6 +2,8 @@
 
 module Installer(installer) where
 
+import Config
+import Data.String
 import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
@@ -15,19 +17,20 @@ installer = nsis $ do
     page Directory
     page InstFiles
 
-    let path = ["$APPDATA/cabal/bin"
-               ,"$INSTDIR/ghc-7.8.3/bin"
-               ,"$INSTDIR/ghc-7.8.3/mingw/bin"
-               ,"$INSTDIR/cabal-1.20.0.3/bin"
-               ,"$INSTDIR/msys-1.0/bin"]
+    let path = map fromString
+            ["$APPDATA/cabal/bin"
+            ,"$INSTDIR/ghc-" ++ versionGHC ++ "/bin"
+            ,"$INSTDIR/ghc-" ++ versionGHC ++ "/mingw/bin"
+            ,"$INSTDIR/cabal-" ++ versionCabal ++ "/bin"
+            ,"$INSTDIR/msys-" ++ versionMSYS ++ "/bin"]
 
     section "" [] $ do
         setOutPath "$INSTDIR"        -- Where to install files in this section
         writeUninstaller "uninstall.exe"
 
-        file [Recursive] "ghc-7.8.3"
-        file [Recursive] "cabal-1.20.0.3"
-        file [Recursive] "msys-1.0"
+        file [Recursive] $ fromString $ "ghc-" ++ versionGHC
+        file [Recursive] $ fromString $ "cabal-" ++ versionCabal
+        file [Recursive] $ fromString $ "msys-" ++ versionMSYS
 
         -- Should use HKLM instead of HKCU for all but APPDATA.
         -- However, we need to ensure that the APPDATA path comes first.
