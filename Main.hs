@@ -53,9 +53,10 @@ main = do
             liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
             cmd "unzip" ["../msys-" ++ ver ++ ".zip"]
 
-        ("minghc-" ++ versionGHC ++ ".exe") %> \out -> do
-            need ["ltshaskell.nsi",".cabal-" ++ versionCabal,".ghc-" ++ versionGHC,".msys-" ++ versionMSYS]
+        "minghc-*.exe" %> \out -> do
+            let ver = version out
+            need [out -<.> "nsi",".cabal-" ++ versionCabal,".ghc-" ++ ver,".msys-" ++ versionMSYS]
             cmd "makensis" [out -<.> "nsi"]
 
-        ("minghc-" ++ versionGHC ++ ".nsi") %> \out -> do
-            writeFile' out $ installer versionGHC
+        "minghc-*.nsi" %> \out -> do
+            writeFile' out $ installer $ version out
