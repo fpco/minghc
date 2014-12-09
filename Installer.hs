@@ -38,13 +38,20 @@ installer versionGHC = nsis $ do
         file [Recursive] "cabal-$CABAL"
         file [Recursive] "msys-$MSYS"
 
+        createDirectory "$INSTDIR/switch"
+        writeFileLines "$INSTDIR/switch/minghc-$GHC.bat" $
+            ["set PATH=" & x & ";%PATH%" | x <- path] ++
+            ["ghc --version"]
+
     section "Add programs to PATH" [Description "Put GHC, Cabal and MSYS on the %PATH%"] $ do
         -- Should use HKLM instead of HKCU for all but APPDATA.
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
         mapM_ (setEnvVarPrepend HKCU "PATH") path
 
+    section "Add switcher to PATH" [Description "Put minghc-$GHC.bat on the %PATH%, which puts the other programs on the %PATH%"] $ do
+        setEnvVarPrepend HKCU "PATH" "$INSTDIR/switch"
 
     uninstall $ do
         rmdir [Recursive] "$INSTDIR"
-        mapM_ (setEnvVarRemove HKCU "PATH") path
+        mapM_ (setEnvVarRemove HKCU "PATH") $ "$INSTDIR/switch" : path
