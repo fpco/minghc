@@ -26,12 +26,12 @@ main = do
             let url = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++ "-i386-unknown-mingw32.tar.bz2"
             cmd "wget --no-check-certificate" url "-O" out
 
-        ".cabal-1.20" %> \out -> do
+        ".cabal-1.20.0.3" %> \out -> do
             writeFile' out ""
             need ["cabal-1.20.0.3.tar.gz"]
-            liftIO $ ignore $ removeDirectoryRecursive "cabal-1.20"
-            liftIO $ createDirectoryIfMissing True "cabal-1.20/bin"
-            cmd "tar zxfv cabal-1.20.0.3.tar.gz -C cabal-1.20/bin"
+            liftIO $ ignore $ removeDirectoryRecursive "cabal-1.20.0.3"
+            liftIO $ createDirectoryIfMissing True "cabal-1.20.0.3/bin"
+            cmd "tar zxfv cabal-1.20.0.3.tar.gz -C cabal-1.20.0.3/bin"
 
         ".ghc-7.8.3" %> \out -> do
             writeFile' out ""
@@ -45,7 +45,7 @@ main = do
             cmd "unzip ../msys-1.0.zip"
 
         "ltshaskell.exe" %> \out -> do
-            need ["ltshaskell.nsi",".cabal-1.20",".ghc-7.8.3",".msys-1.0"]
+            need ["ltshaskell.nsi",".cabal-1.20.0.3",".ghc-7.8.3",".msys-1.0"]
             cmd "makensis ltshaskell.nsi"
 
         "ltshaskell.nsi" %> \out -> do

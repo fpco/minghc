@@ -20,7 +20,7 @@ installer = nsis $ do
         writeUninstaller "uninstall.exe"
 
         file [Recursive] "ghc-7.8.3"
-        file [Recursive] "cabal-1.20"
+        file [Recursive] "cabal-1.20.0.3"
         file [Recursive] "msys-1.0"
 
         -- Should use HKLM instead of HKCU for all but APPDATA.
@@ -30,13 +30,13 @@ installer = nsis $ do
         setEnvVarAppend HKCU "PATH" "$APPDATA/cabal/bin"
         setEnvVarAppend HKCU "PATH" "$INSTDIR/ghc-7.8.3/bin"
         setEnvVarAppend HKCU "PATH" "$INSTDIR/ghc-7.8.3/mingw/bin"
-        setEnvVarAppend HKCU "PATH" "$INSTDIR/cabal-1.20/bin"
+        setEnvVarAppend HKCU "PATH" "$INSTDIR/cabal-1.20.0.3/bin"
         setEnvVarAppend HKCU "PATH" "$INSTDIR/msys-1.0/bin"
 
     uninstall $ do
         rmdir [Recursive] "$INSTDIR"
         setEnvVarRemove HKCU "PATH" "$INSTDIR/msys-1.0/bin"
-        setEnvVarRemove HKCU "PATH" "$INSTDIR/cabal-1.20/bin"
+        setEnvVarRemove HKCU "PATH" "$INSTDIR/cabal-1.20.0.3/bin"
         setEnvVarRemove HKCU "PATH" "$INSTDIR/ghc-7.8.3/mingw/bin"
         setEnvVarRemove HKCU "PATH" "$INSTDIR/ghc-7.8.3/bin"
         setEnvVarRemove HKCU "PATH" "$APPDATA/cabal/bin"
