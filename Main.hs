@@ -4,7 +4,6 @@ module Main(main) where
 import Development.Shake
 import Development.Shake.FilePath
 import Control.Exception.Extra
-import System.Directory
 import Data.List.Extra
 import System.Directory
 import Installer
