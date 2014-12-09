@@ -13,6 +13,7 @@ installer versionGHC = nsis $ do
     outFile $ fromString $ "minghc-" ++ versionGHC ++ ".exe"
     installDir $ fromString $ "$PROGRAMFILES/MinGHC-" ++ versionGHC
     requestExecutionLevel User
+    setCompressor LZMA [Solid]
 
     page Components
     page Directory
