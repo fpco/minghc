@@ -19,8 +19,8 @@ main :: IO ()
 main = do
     createDirectoryIfMissing True ".build"
     setCurrentDirectory ".build"
-    shakeArgs shakeOptions $ do
-        want ["minghc-" ++ versionGHC ++ ".exe"]
+    shakeArgsWith shakeOptions [] $ \_ ver -> return $ Just $ do
+        want ["minghc-" ++ last (versionGHC:ver) ++ ".exe"]
 
         "cabal-*.tar.gz" %> \out -> do
             let ver = version out
