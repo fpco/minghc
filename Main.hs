@@ -15,7 +15,7 @@ main = do
     createDirectoryIfMissing True ".build"
     setCurrentDirectory ".build"
     shakeArgs shakeOptions $ do
-        want ["ltshaskell.exe"]
+        want ["minghc-" ++ versionGHC ++ ".exe"]
 
         "cabal-*.tar.gz" %> \out -> do
             let ver = splitOn "-" (dropExtension $ takeBaseName out) !! 1
@@ -48,9 +48,9 @@ main = do
             liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
             cmd "unzip" ["../msys-" ++ ver ++ ".zip"]
 
-        "ltshaskell.exe" %> \out -> do
+        ("minghc-" ++ versionGHC ++ ".exe") %> \out -> do
             need ["ltshaskell.nsi",".cabal-" ++ versionCabal,".ghc-" ++ versionGHC,".msys-" ++ versionMSYS]
             cmd "makensis" [out -<.> "nsi"]
 
-        "ltshaskell.nsi" %> \out -> do
+        ("minghc-" ++ versionGHC ++ ".nsi") %> \out -> do
             writeFile' out installer

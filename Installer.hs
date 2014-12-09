@@ -9,8 +9,8 @@ import Development.NSIS.Plugins.EnvVarUpdate
 
 installer :: String
 installer = nsis $ do
-    name "LTSHaskell"
-    outFile "LTSHaskell.exe"
+    name $ fromString $ "MinGHC-" ++ versionGHC
+    outFile $ fromString $ "minghc-" ++ versionGHC ++ ".exe"
     installDir "$PROGRAMFILES/LTSHaskell"
     requestExecutionLevel User
 
