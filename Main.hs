@@ -50,7 +50,7 @@ main = do
 
         "ltshaskell.exe" %> \out -> do
             need ["ltshaskell.nsi",".cabal-" ++ versionCabal,".ghc-" ++ versionGHC,".msys-" ++ versionMSYS]
-            cmd "makensis ltshaskell.nsi"
+            cmd "makensis" [out -<.> "nsi"]
 
         "ltshaskell.nsi" %> \out -> do
             writeFile' out installer
