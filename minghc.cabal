@@ -1,0 +1,36 @@
+cabal-version:      >= 1.10
+build-type:         Simple
+name:               minghc
+version:            0.1
+license:            MIT
+license-file:       LICENSE
+category:           Development
+author:             Michael Snoyman <michael@snoyman.com>
+maintainer:         Michael Snoyman <michael@snoyman.com>
+copyright:          Michael Snoyman 2014
+synopsis:           Generate installers for GHC
+description:
+    Generate an installer for GHC, which bundles Cabal (so you can install stuff)
+    and MSYS (so you can install network).
+homepage:           https://github.com/snoyberg/haskell-windows-installer/
+bug-reports:        https://github.com/snoyberg/haskell-windows-installer/issues
+extra-source-files:
+    msys-1.0.zip
+
+source-repository head
+    type:     git
+    location: https://github.com/snoyberg/haskell-windows-installer.git
+
+executable minghc-generate
+    default-language: Haskell2010
+    main-is: Main.hs
+    build-depends:
+        base == 4.*,
+        directory,
+        extra >= 0.8,
+        shake >= 0.14,
+        nsis >= 0.2.4
+
+    other-modules:
+        Installer
+        Config
