@@ -26,23 +26,26 @@ main = do
             let url = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++ "-i386-unknown-mingw32.tar.bz2"
             cmd "wget --no-check-certificate" url "-O" out
 
-        ".cabal-1.20.0.3" %> \out -> do
+        ".cabal-*" %> \out -> do
+            let ver = splitOn "-" out !! 1
             writeFile' out ""
-            need ["cabal-1.20.0.3.tar.gz"]
-            liftIO $ ignore $ removeDirectoryRecursive "cabal-1.20.0.3"
-            liftIO $ createDirectoryIfMissing True "cabal-1.20.0.3/bin"
-            cmd "tar zxfv cabal-1.20.0.3.tar.gz -C cabal-1.20.0.3/bin"
+            need ["cabal-" ++ ver ++ ".tar.gz"]
+            liftIO $ ignore $ removeDirectoryRecursive $ "cabal-" ++ ver
+            liftIO $ createDirectoryIfMissing True $ "cabal-" ++ ver ++ "/bin"
+            cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["cabal-" ++ ver ++ "/bin"]
 
-        ".ghc-7.8.3" %> \out -> do
+        ".ghc-*" %> \out -> do
+            let ver = splitOn "-" out !! 1
             writeFile' out ""
-            need ["ghc-7.8.3.tar.bz2"]
-            liftIO $ ignore $ removeDirectoryRecursive "ghc-7.8.3"
-            cmd "tar xf ghc-7.8.3.tar.bz2"
+            need ["ghc-" ++ ver ++ ".tar.bz2"]
+            liftIO $ ignore $ removeDirectoryRecursive $ "ghc-" ++ ver
+            cmd "tar xf" ["ghc-" ++ ver ++ ".tar.bz2"]
 
-        ".msys-1.0" %> \out -> do
+        ".msys-*" %> \out -> do
+            let ver = splitOn "-" out !! 1
             writeFile' out ""
-            liftIO $ ignore $ removeDirectoryRecursive "msys-1.0"
-            cmd "unzip ../msys-1.0.zip"
+            liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
+            cmd "unzip" ["../msys-" ++ ver ++ ".zip"]
 
         "ltshaskell.exe" %> \out -> do
             need ["ltshaskell.nsi",".cabal-1.20.0.3",".ghc-7.8.3",".msys-1.0"]
