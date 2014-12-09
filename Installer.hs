@@ -7,8 +7,8 @@ import Data.String
 import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
-installer :: String
-installer = nsis $ do
+installer :: String -> String
+installer versionGHC = nsis $ do
     name $ fromString $ "MinGHC-" ++ versionGHC
     outFile $ fromString $ "minghc-" ++ versionGHC ++ ".exe"
     installDir "$PROGRAMFILES/LTSHaskell"
