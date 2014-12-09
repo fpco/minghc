@@ -9,9 +9,13 @@ import Development.NSIS.Plugins.EnvVarUpdate
 
 installer :: String -> String
 installer versionGHC = nsis $ do
-    name $ fromString $ "MinGHC-" ++ versionGHC
-    outFile $ fromString $ "minghc-" ++ versionGHC ++ ".exe"
-    installDir $ fromString $ "$PROGRAMFILES/MinGHC-" ++ versionGHC
+    _ <- constant "GHC" (fromString versionGHC :: Exp String)
+    _ <- constant "CABAL" (fromString versionCabal :: Exp String)
+    _ <- constant "MSYS" (fromString versionMSYS :: Exp String)
+
+    name "MinGHC-$GHC"
+    outFile "minghc-$GHC.exe"
+    installDir "$PROGRAMFILES/MinGHC-$GHC"
     requestExecutionLevel User
     setCompressor LZMA [Solid]
 
@@ -19,20 +23,20 @@ installer versionGHC = nsis $ do
     page Directory
     page InstFiles
 
-    let path = map fromString
+    let path =
             ["$APPDATA/cabal/bin"
-            ,"$INSTDIR/ghc-" ++ versionGHC ++ "/bin"
-            ,"$INSTDIR/ghc-" ++ versionGHC ++ "/mingw/bin"
-            ,"$INSTDIR/cabal-" ++ versionCabal ++ "/bin"
-            ,"$INSTDIR/msys-" ++ versionMSYS ++ "/bin"]
+            ,"$INSTDIR/ghc-$GHC/bin"
+            ,"$INSTDIR/ghc-$GHC/mingw/bin"
+            ,"$INSTDIR/cabal-$CABAL/bin"
+            ,"$INSTDIR/msys-$MSYS/bin"]
 
     section "Install" [Required, Description "Install GHC, Cabal and MSYS"] $ do
         setOutPath "$INSTDIR"        -- Where to install files in this section
         writeUninstaller "uninstall.exe"
 
-        file [Recursive] $ fromString $ "ghc-" ++ versionGHC
-        file [Recursive] $ fromString $ "cabal-" ++ versionCabal
-        file [Recursive] $ fromString $ "msys-" ++ versionMSYS
+        file [Recursive] "ghc-$GHC"
+        file [Recursive] "cabal-$CABAL"
+        file [Recursive] "msys-$MSYS"
 
     section "Add programs to PATH" [Description "Put GHC, Cabal and MSYS on the %PATH%"] $ do
         -- Should use HKLM instead of HKCU for all but APPDATA.
