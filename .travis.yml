@@ -1,0 +1,5 @@
+language: haskell
+script:
+  - cabal configure && cabal build && cabal install
+  - sudo apt-get install nsis
+  - minghc-generate
