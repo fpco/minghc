@@ -5,9 +5,15 @@ import Development.Shake
 import Development.Shake.FilePath
 import Control.Exception.Extra
 import Data.List.Extra
+import Data.Char
 import System.Directory
 import Installer
 import Config
+
+
+version :: String -> String
+version = intercalate "." . filter (all isDigit) . wordsBy (`elem` "-.")
+
 
 main :: IO ()
 main = do
@@ -17,17 +23,17 @@ main = do
         want ["minghc-" ++ versionGHC ++ ".exe"]
 
         "cabal-*.tar.gz" %> \out -> do
-            let ver = splitOn "-" (dropExtension $ takeBaseName out) !! 1
+            let ver = version out
             let url = "https://www.haskell.org/cabal/release/cabal-install-" ++ ver ++ "/cabal-" ++ ver ++ "-i386-unknown-mingw32.tar.gz"
             cmd "wget --no-check-certificate" url "-O" out
 
         "ghc-*.tar.bz2" %> \out -> do
-            let ver = splitOn "-" (dropExtension $ takeBaseName out) !! 1
+            let ver = version out
             let url = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++ "-i386-unknown-mingw32.tar.bz2"
             cmd "wget --no-check-certificate" url "-O" out
 
         ".cabal-*" %> \out -> do
-            let ver = splitOn "-" out !! 1
+            let ver = version out
             writeFile' out ""
             need ["cabal-" ++ ver ++ ".tar.gz"]
             liftIO $ ignore $ removeDirectoryRecursive $ "cabal-" ++ ver
@@ -35,14 +41,14 @@ main = do
             cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["cabal-" ++ ver ++ "/bin"]
 
         ".ghc-*" %> \out -> do
-            let ver = splitOn "-" out !! 1
+            let ver = version out
             writeFile' out ""
             need ["ghc-" ++ ver ++ ".tar.bz2"]
             liftIO $ ignore $ removeDirectoryRecursive $ "ghc-" ++ ver
             cmd "tar xf" ["ghc-" ++ ver ++ ".tar.bz2"]
 
         ".msys-*" %> \out -> do
-            let ver = splitOn "-" out !! 1
+            let ver = version out
             writeFile' out ""
             liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
             cmd "unzip" ["../msys-" ++ ver ++ ".zip"]
