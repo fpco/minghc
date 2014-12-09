@@ -17,9 +17,9 @@ main = shake shakeOptions $ do
         writeFile' out ""
 
     ".ghc-7.8.3" %> \out -> do
-        () <- cmd "wget --no-check-certificate https://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-i386-unknown-mingw32.tar.xz"
+        () <- cmd "wget --no-check-certificate https://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-i386-unknown-mingw32.tar.bz2"
         () <- cmd "rm -rf ghc-7.8.3"
-        () <- cmd "tar xf ghc-7.8.3-i386-unknown-mingw32.tar.xz"
+        () <- cmd "tar xf ghc-7.8.3-i386-unknown-mingw32.tar.bz2"
         writeFile' out ""
 
     ".msys-1.0" %> \out -> do
