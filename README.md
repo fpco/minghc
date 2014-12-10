@@ -19,7 +19,7 @@ To use MinGHC, download and run the installer. There are two options you may wis
 
 ## Motivation
 
-There are two existing ways to get GHC on Windows, straight from the GHC distribution and using the Haskell platform. The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
+There are two existing ways to get GHC on Windows, straight from the [GHC distribution](https://www.haskell.org/ghc/) and using the [Haskell Platform](https://www.haskell.org/platform/). The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
 
 ## Building the Installer
 
