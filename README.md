@@ -17,6 +17,14 @@ To use MinGHC, download and run the installer. There are two options you may wis
 * "Add programs to PATH" - select this if you want to make this version of GHC the standard one you use for general development. It will modify your `%PATH%` environment variable so the MinGHC installed copies of `ghc` and `cabal` are used by default.
 * "Add switcher to PATH" - select this if you want to use a different GHC normally, but occasionally switch to this version. After installation, type `minghc-7.8.3` at a command prompt to temporarily add the MinGHC copies of `ghc` and `cabal`.
 
+_Caveats:_ To build certainly packages (e.g. [haskell-src-exts](https://hackage.haskell.org/package/haskell-src-exts)) you may need the tools [Happy](https://www.haskell.org/happy/) or [Alex](https://www.haskell.org/alex/) on your `%PATH%`. You can install these packages in the right place by typing `cabal install happy && cabal install alex`.
+
+### Older installer links
+
+* [GHC 7.6.3](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.6.3.exe)
+* [GHC 7.4.2](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.4.2.exe)
+* [GHC 7.2.2](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.2.2.exe)
+
 ## Motivation
 
 There are two existing ways to get GHC on Windows, straight from the [GHC distribution](https://www.haskell.org/ghc/) and using the [Haskell Platform](https://www.haskell.org/platform/). The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
