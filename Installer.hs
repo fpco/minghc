@@ -17,7 +17,7 @@ installer quick versionGHC = nsis $ do
     name "MinGHC-$GHC"
     outFile "minghc-$GHC.exe"
     installDir "$PROGRAMFILES/MinGHC-$GHC"
-    requestExecutionLevel User
+    requestExecutionLevel Highest
     unless quick $ setCompressor LZMA [Solid]
 
     page Components
