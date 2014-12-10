@@ -3,6 +3,7 @@
 module Installer(installer) where
 
 import Config
+import Control.Monad
 import Data.String
 import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
@@ -17,7 +18,7 @@ installer quick versionGHC = nsis $ do
     outFile "minghc-$GHC.exe"
     installDir "$PROGRAMFILES/MinGHC-$GHC"
     requestExecutionLevel User
-    setCompressor LZMA [Solid | not quick]
+    unless quick $ setCompressor LZMA [Solid]
 
     page Components
     page Directory
