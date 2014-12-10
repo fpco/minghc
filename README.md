@@ -30,3 +30,7 @@ Users of the installer have no need to build it, these are mostly notes for deve
 * Run `cabal install`.
 * Run `minghc-generate`. That will generate a file `.build/minghc-7.8.3.exe` (takes about 10 minutes).
 * To build for other versions of GHC, pass the version on the command line, for example `minghc-generate 7.6.3`.
+
+## Possible future enhancements
+
+* Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
