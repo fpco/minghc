@@ -54,4 +54,5 @@ installer versionGHC = nsis $ do
 
     uninstall $ do
         rmdir [Recursive] "$INSTDIR"
-        mapM_ (setEnvVarRemove HKCU "PATH") $ "$INSTDIR/switch" : path
+        -- make sure we don't remove $APPDATA/cabal/bin, since users may have had that on their $PATH before
+        mapM_ (setEnvVarRemove HKCU "PATH") $ "$INSTDIR/switch" : drop 1 path
