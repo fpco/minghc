@@ -7,8 +7,8 @@ import Data.String
 import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
-installer :: String -> String
-installer versionGHC = nsis $ do
+installer :: Bool -> String -> String
+installer quick versionGHC = nsis $ do
     _ <- constant "GHC" (fromString versionGHC :: Exp String)
     _ <- constant "CABAL" (fromString versionCabal :: Exp String)
     _ <- constant "MSYS" (fromString versionMSYS :: Exp String)
@@ -17,7 +17,7 @@ installer versionGHC = nsis $ do
     outFile "minghc-$GHC.exe"
     installDir "$PROGRAMFILES/MinGHC-$GHC"
     requestExecutionLevel User
-    setCompressor LZMA [Solid]
+    setCompressor LZMA [Solid | not quick]
 
     page Components
     page Directory

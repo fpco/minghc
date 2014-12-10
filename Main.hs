@@ -4,6 +4,7 @@ module Main(main) where
 import Development.Shake
 import Development.Shake.FilePath
 import Control.Exception.Extra
+import System.Console.GetOpt
 import Data.List.Extra
 import Data.Char
 import System.Directory
@@ -14,12 +15,14 @@ import Config
 version :: String -> String
 version = intercalate "." . filter (all isDigit) . wordsBy (`elem` "-.")
 
+data Flags = Quick deriving Eq
+flags = [Option "" ["quick"] (NoArg $ Right Quick) "Build without solid compression."]
 
 main :: IO ()
 main = do
     createDirectoryIfMissing True ".build"
     setCurrentDirectory ".build"
-    shakeArgsWith shakeOptions [] $ \_ ver -> return $ Just $ do
+    shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         want ["minghc-" ++ last (versionGHC:ver) ++ ".exe"]
 
         "cabal-*.tar.gz" %> \out -> do
@@ -60,4 +63,4 @@ main = do
 
         "minghc-*.nsi" %> \out -> do
             need ["../Installer.hs"]
-            writeFile' out $ installer $ version out
+            writeFile' out $ installer (Quick `elem` flags) $ version out
