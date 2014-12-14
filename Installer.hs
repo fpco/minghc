@@ -24,6 +24,8 @@ installer quick version = nsis $ do
     page Components
     page Directory
     page InstFiles
+    unpage Confirm
+    unpage InstFiles
 
     -- important that $APPDATA/cabal/bin is first because we prepend to the PATH
     -- meaning it ends up being on the PATH lower-priority than our stuff,
