@@ -20,7 +20,7 @@ main :: IO ()
 main = do
     createDirectoryIfMissing True ".build/bin"
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
-        want ["minghc-" ++ last (defaultVersion GHC : ver) ++ ".exe"]
+        want ["minghc-" ++ v ++ ".exe" | v <- if null ver then [defaultVersion GHC] else ver]
 
         let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
         "cabal-*.tar.gz" %> \out -> wget (source Cabal $ extractVersion out) out
