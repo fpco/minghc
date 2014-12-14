@@ -26,6 +26,8 @@ main = do
         "cabal-*.tar.gz" %> \out -> wget (source Cabal $ extractVersion out) out
         "ghc-*.tar.bz2" %> \out -> wget (source GHC $ extractVersion out) out
         "msys-*.zip" %> \out -> wget (source MSYS $ extractVersion out) out
+        "alex-*.exe" %> \out -> wget (source Alex $ extractVersion out) out
+        "happy-*.exe" %> \out -> wget (source Happy $ extractVersion out) out
 
         ".cabal-*" %> \out -> do
             let ver = extractVersion out
@@ -33,6 +35,18 @@ main = do
             need ["cabal-" ++ ver ++ ".tar.gz"]
             unit $ cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["bin"]
             needed ["bin/cabal.exe"] -- make sure that we check we have this version in PATH
+
+        ".alex-*" %> \out -> do
+            let ver = extractVersion out
+            writeFile' out ""
+            copyFile' ("alex-" ++ ver ++ ".exe") "bin/alex.exe"
+            needed ["bin/alex.exe"]
+
+        ".happy-*" %> \out -> do
+            let ver = extractVersion out
+            writeFile' out ""
+            copyFile' ("happy-" ++ ver ++ ".exe") "bin/happy.exe"
+            needed ["bin/happy.exe"]
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out

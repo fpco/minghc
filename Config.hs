@@ -10,7 +10,7 @@ import Development.Shake.FilePath
 import Data.Char
 
 
-data Program = GHC | Cabal | MSYS deriving (Eq,Show,Enum,Bounded)
+data Program = GHC | Cabal | MSYS | Alex | Happy deriving (Eq,Show,Enum,Bounded)
 
 type Version = String
 
@@ -19,6 +19,8 @@ defaultVersion :: Program -> Version
 defaultVersion GHC = "7.8.3"
 defaultVersion MSYS = "1.0.1"
 defaultVersion Cabal = "1.20.0.3"
+defaultVersion Alex = "3.1.3"
+defaultVersion Happy = "1.19.4"
 
 source :: Program -> Version -> String
 -- Official GHC release, available in xv and bz2, but the xv one is harder to extract on Windows systems
@@ -27,6 +29,10 @@ source GHC ver = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++
 source Cabal ver = "https://www.haskell.org/cabal/release/cabal-install-" ++ ver ++ "/cabal-" ++ ver ++ "-i386-unknown-mingw32.tar.gz"
 -- A mirror, from where???
 source MSYS ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/msys-" ++ ver ++ ".zip"
+-- Version compiled by Michael Snoyman using GHC 7.8.3
+source Alex ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/alex-" ++ ver ++ ".exe"
+-- Version compiled by Michael Snoyman using GHC 7.8.3
+source Happy ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/happy-" ++ ver ++ ".exe"
 
 
 -- | Given a filename containing a version-like bit, extract the version
