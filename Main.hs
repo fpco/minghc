@@ -52,10 +52,10 @@ main = do
 
         "minghc-*.exe" %> \out -> do
             let ver = extractVersion out
-            need [out -<.> "nsi"
-                 ,".ghc-" ++ extractVersion out
-                 ,".msys-" ++ defaultVersion MSYS
-                 ,".cabal-" ++ defaultVersion Cabal]
+            need $ [out -<.> "nsi"
+                   ,".ghc-" ++ extractVersion out] ++
+                   ["." ++ lower (show prog) ++ "-" ++ defaultVersion prog
+                   | prog <- [minBound..maxBound], prog /= GHC]
             cmd "makensis -V3" [out -<.> "nsi"]
 
         "minghc-*.nsi" %> \out -> do
