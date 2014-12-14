@@ -24,6 +24,9 @@ installer quick versionGHC = nsis $ do
     page Directory
     page InstFiles
 
+    -- important that $APPDATA/cabal/bin is first because we prepend to the PATH
+    -- meaning it ends up being on the PATH lower-priority than our stuff,
+    -- since the user may have their own old version of cabal in $INSTDIR
     let path =
             ["$APPDATA/cabal/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
