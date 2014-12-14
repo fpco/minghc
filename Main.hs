@@ -18,7 +18,7 @@ flags = [Option "" ["quick"] (NoArg $ Right Quick) "Build without solid compress
 
 main :: IO ()
 main = do
-    createDirectoryIfMissing True ".build/bin"
+    createDirectoryIfMissing True ".build/bin/bin"
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         want ["minghc-" ++ v ++ ".exe" | v <- if null ver then [defaultVersion GHC] else ver]
 
@@ -33,34 +33,36 @@ main = do
             let ver = extractVersion out
             writeFile' out ""
             need ["cabal-" ++ ver ++ ".tar.gz"]
-            unit $ cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["bin"]
-            needed ["bin/cabal.exe"] -- make sure that we check we have this version in PATH
+            unit $ cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["bin/bin"]
+            needed ["bin/bin/cabal.exe"] -- make sure that we check we have this version in PATH
 
         ".alex-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            copyFile' ("alex-" ++ ver ++ ".exe") "bin/alex.exe"
-            needed ["bin/alex.exe"]
+            copyFile' ("alex-" ++ ver ++ ".exe") "bin/bin/alex.exe"
+            needed ["bin/bin/alex.exe"]
 
         ".happy-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            copyFile' ("happy-" ++ ver ++ ".exe") "bin/happy.exe"
-            needed ["bin/happy.exe"]
+            copyFile' ("happy-" ++ ver ++ ".exe") "bin/bin/happy.exe"
+            needed ["bin/bin/happy.exe"]
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
             need ["ghc-" ++ ver ++ ".tar.bz2"]
             liftIO $ ignore $ removeDirectoryRecursive $ "ghc-" ++ ver
-            cmd "tar xf" ["ghc-" ++ ver ++ ".tar.bz2"]
+            liftIO $ createDirectoryIfMissing True $ "ghc-" ++ ver
+            cmd "tar xf" ["ghc-" ++ ver ++ ".tar.bz2"] "-C" ["ghc-" ++ ver]
 
         ".msys-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
             need ["msys-" ++ ver ++ ".zip"]
             liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
-            cmd "unzip" ["msys-" ++ ver ++ ".zip"]
+            liftIO $ createDirectoryIfMissing True $ "msys-" ++ ver
+            cmd "unzip" ["msys-" ++ ver ++ ".zip"] "-d" ["msys-" ++ ver]
 
         "minghc-*.exe" %> \out -> do
             let ver = extractVersion out

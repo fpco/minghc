@@ -39,9 +39,9 @@ installer quick version = nsis $ do
         setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
-        file [Recursive] "bin/*.*"
-        file [Recursive] "ghc-$GHC/*.*"
-        file [Recursive] "msys-$MSYS/*.*"
+        file [Recursive] "bin/*"
+        file [Recursive] "ghc-$GHC/*"
+        file [Recursive] "msys-$MSYS/*"
 
         createDirectory "$INSTDIR/switch"
         writeFileLines "$INSTDIR/switch/minghc-$GHC.bat" $
