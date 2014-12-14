@@ -35,6 +35,11 @@ main = do
             let url = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++ "-i386-unknown-mingw32.tar.bz2"
             cmd "wget --no-check-certificate" url "-O" out
 
+        "msys-*.zip" %> \out -> do
+            let ver = version out
+            let url = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/msys-" ++ ver ++ ".zip"
+            cmd "wget --no-check-certificate" url "-O" out
+
         ".cabal-*" %> \out -> do
             let ver = version out
             writeFile' out ""
@@ -53,8 +58,9 @@ main = do
         ".msys-*" %> \out -> do
             let ver = version out
             writeFile' out ""
+            need ["msys-" ++ ver ++ ".zip"]
             liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
-            cmd "unzip" ["../msys-" ++ ver ++ ".zip"]
+            cmd "unzip" ["msys-" ++ ver ++ ".zip"]
 
         "minghc-*.exe" %> \out -> do
             let ver = version out

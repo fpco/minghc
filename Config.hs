@@ -1,7 +1,7 @@
 
 module Config(versionMSYS, versionCabal, versionGHC) where
 
-versionMSYS = "1.0"
+versionMSYS = "1.0.1"
 
 versionCabal = "1.20.0.3"
 
