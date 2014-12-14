@@ -5,14 +5,15 @@ module Installer(installer) where
 import Config
 import Control.Monad
 import Data.String
+import Data.List.Extra
 import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
-installer :: Bool -> String -> String
-installer quick versionGHC = nsis $ do
-    _ <- constant "GHC" (fromString versionGHC :: Exp String)
-    _ <- constant "CABAL" (fromString versionCabal :: Exp String)
-    _ <- constant "MSYS" (fromString versionMSYS :: Exp String)
+
+installer :: Bool -> (Program -> Version) -> String
+installer quick version = nsis $ do
+    forM_ [minBound..maxBound] $ \prog ->
+        constant (upper $ show prog) (fromString $ version prog :: Exp String)
 
     name "MinGHC-$GHC"
     outFile "minghc-$GHC.exe"
