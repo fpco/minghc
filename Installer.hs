@@ -29,17 +29,17 @@ installer quick versionGHC = nsis $ do
     -- since the user may have their own old version of cabal in $INSTDIR
     let path =
             ["$APPDATA/cabal/bin"
+            ,"$INSTDIR/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
             ,"$INSTDIR/ghc-$GHC/mingw/bin"
-            ,"$INSTDIR/cabal-$CABAL/bin"
             ,"$INSTDIR/msys-$MSYS/bin"]
 
     section "Install" [Required, Description "Install GHC, Cabal and MSYS"] $ do
         setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
+        file [Recursive] "bin"
         file [Recursive] "ghc-$GHC"
-        file [Recursive] "cabal-$CABAL"
         file [Recursive] "msys-$MSYS"
 
         createDirectory "$INSTDIR/switch"

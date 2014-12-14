@@ -5,6 +5,7 @@ import Development.Shake
 import Development.Shake.FilePath
 import Control.Exception.Extra
 import System.Console.GetOpt
+import Control.Monad.Extra
 import Data.List.Extra
 import Data.Char
 import System.Directory
@@ -44,9 +45,9 @@ main = do
             let ver = version out
             writeFile' out ""
             need ["cabal-" ++ ver ++ ".tar.gz"]
-            liftIO $ ignore $ removeDirectoryRecursive $ "cabal-" ++ ver
-            liftIO $ createDirectoryIfMissing True $ "cabal-" ++ ver ++ "/bin"
-            cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["cabal-" ++ ver ++ "/bin"]
+            liftIO $ createDirectoryIfMissing True "bin"
+            unit $ cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["bin"]
+            needed ["bin/cabal.exe"] -- make sure that we check we have this version in PATH
 
         ".ghc-*" %> \out -> do
             let ver = version out
