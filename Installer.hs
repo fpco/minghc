@@ -32,7 +32,7 @@ installer quick versionGHC = nsis $ do
             ,"$INSTDIR/msys-$MSYS/bin"]
 
     section "Install" [Required, Description "Install GHC, Cabal and MSYS"] $ do
-        setOutPath "$INSTDIR"        -- Where to install files in this section
+        setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
         file [Recursive] "ghc-$GHC"
