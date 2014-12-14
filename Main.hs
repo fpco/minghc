@@ -23,14 +23,10 @@ main = do
     shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         want ["minghc-" ++ last (defaultVersion GHC : ver) ++ ".exe"]
 
-        "cabal-*.tar.gz" %> \out -> do
-            cmd "wget --no-check-certificate" (source Cabal $ extractVersion out) "-O" out
-
-        "ghc-*.tar.bz2" %> \out -> do
-            cmd "wget --no-check-certificate" (source GHC $ extractVersion out) "-O" out
-
-        "msys-*.zip" %> \out -> do
-            cmd "wget --no-check-certificate" (source MSYS $ extractVersion out) "-O" out
+        let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
+        "cabal-*.tar.gz" %> \out -> wget (source Cabal $ extractVersion out) out
+        "ghc-*.tar.bz2" %> \out -> wget (source GHC $ extractVersion out) out
+        "msys-*.zip" %> \out -> wget (source MSYS $ extractVersion out) out
 
         ".cabal-*" %> \out -> do
             let ver = extractVersion out
