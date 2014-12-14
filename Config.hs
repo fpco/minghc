@@ -21,9 +21,12 @@ defaultVersion MSYS = "1.0.1"
 defaultVersion Cabal = "1.20.0.3"
 
 source :: Program -> Version -> String
+-- Official GHC release, available in xv and bz2, but the xv one is harder to extract on Windows systems
 source GHC ver = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++ "-i386-unknown-mingw32.tar.bz2"
-source MSYS ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/msys-" ++ ver ++ ".zip"
+-- Official Cabal release as a binary snapshot
 source Cabal ver = "https://www.haskell.org/cabal/release/cabal-install-" ++ ver ++ "/cabal-" ++ ver ++ "-i386-unknown-mingw32.tar.gz"
+-- A mirror, from where???
+source MSYS ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/msys-" ++ ver ++ ".zip"
 
 
 -- | Given a filename containing a version-like bit, extract the version
