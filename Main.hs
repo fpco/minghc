@@ -18,7 +18,7 @@ flags = [Option "" ["quick"] (NoArg $ Right Quick) "Build without solid compress
 
 main :: IO ()
 main = do
-    createDirectoryIfMissing True ".build"
+    createDirectoryIfMissing True ".build/bin"
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         want ["minghc-" ++ last (defaultVersion GHC : ver) ++ ".exe"]
 
@@ -31,7 +31,6 @@ main = do
             let ver = extractVersion out
             writeFile' out ""
             need ["cabal-" ++ ver ++ ".tar.gz"]
-            liftIO $ createDirectoryIfMissing True "bin"
             unit $ cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["bin"]
             needed ["bin/cabal.exe"] -- make sure that we check we have this version in PATH
 
