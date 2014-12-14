@@ -8,7 +8,7 @@ import System.Console.GetOpt
 import Control.Monad.Extra
 import Data.List.Extra
 import Data.Char
-import System.Directory
+import System.Directory.Extra
 import Installer
 import Config
 
@@ -19,8 +19,7 @@ flags = [Option "" ["quick"] (NoArg $ Right Quick) "Build without solid compress
 main :: IO ()
 main = do
     createDirectoryIfMissing True ".build"
-    setCurrentDirectory ".build"
-    shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
+    withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         want ["minghc-" ++ last (defaultVersion GHC : ver) ++ ".exe"]
 
         let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
