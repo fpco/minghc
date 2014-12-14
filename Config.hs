@@ -15,6 +15,7 @@ data Program = GHC | Cabal | MSYS deriving (Eq,Show,Enum,Bounded)
 type Version = String
 
 defaultVersion :: Program -> Version
+-- Latest released versions of all
 defaultVersion GHC = "7.8.3"
 defaultVersion MSYS = "1.0.1"
 defaultVersion Cabal = "1.20.0.3"
