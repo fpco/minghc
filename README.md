@@ -8,7 +8,6 @@ This project provides a Windows installer with:
 
 It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.
 
-**The installer is currently only capable of installing 32-bit GHC.**
 
 ## Using the Installer
 
@@ -43,4 +42,5 @@ Users of the installer have no need to build it, these are mostly notes for deve
 
 ## Possible future enhancements
 
+* Add support for 64-bit GHC.
 * Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
