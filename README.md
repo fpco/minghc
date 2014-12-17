@@ -8,9 +8,11 @@ This project provides a Windows installer with:
 
 It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.
 
+**The installer is currently only capable of installing 32-bit GHC.**
+
 ## Using the Installer
 
-[**Download installer with GHC 7.8.3**](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.8.3.exe)
+[**Download installer with GHC 7.8.3 (32-bit)**](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.8.3.exe)
 
 To use MinGHC, download and run the installer. There are two options you may wish to modify:
 
