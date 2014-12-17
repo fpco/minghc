@@ -22,9 +22,9 @@ _Caveats:_ To build certain packages (e.g. [haskell-src-exts](https://hackage.ha
 
 ### Older installer links
 
-* [GHC 7.6.3](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.6.3.exe)
-* [GHC 7.4.2](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.4.2.exe)
-* [GHC 7.2.2](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.2.2.exe)
+* [GHC 7.6.3 (32-bit)](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.6.3.exe)
+* [GHC 7.4.2 (32-bit)](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.4.2.exe)
+* [GHC 7.2.2 (32-bit)](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.2.2.exe)
 
 ## Motivation
 
