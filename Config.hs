@@ -18,7 +18,7 @@ defaultVersion :: Program -> Version
 -- Latest released versions of all
 defaultVersion GHC = "7.8.3"
 defaultVersion MSYS = "1.0.1"
-defaultVersion Cabal = "1.20.0.3"
+defaultVersion Cabal = "1.20.0.4"
 defaultVersion Alex = "3.1.3"
 defaultVersion Happy = "1.19.4"
 
