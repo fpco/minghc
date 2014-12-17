@@ -66,6 +66,7 @@ main = do
 
         "minghc-*.exe" %> \out -> do
             let ver = extractVersion out
+            need ["../Config.hs"]
             need $ [out -<.> "nsi"
                    ,".ghc-" ++ extractVersion out] ++
                    ["." ++ lower (show prog) ++ "-" ++ defaultVersion prog
@@ -73,6 +74,6 @@ main = do
             cmd "makensis -V3" [out -<.> "nsi"]
 
         "minghc-*.nsi" %> \out -> do
-            need ["../Installer.hs"]
+            need ["../Installer.hs","../Config.hs"]
             writeFile' out $ installer (Quick `elem` flags) $
                 \prog -> if prog == GHC then extractVersion out else defaultVersion prog
