@@ -30,6 +30,11 @@ _Caveats:_ To build certain packages (e.g. [haskell-src-exts](https://hackage.ha
 
 There are two existing ways to get GHC on Windows, straight from the [GHC distribution](https://www.haskell.org/ghc/) and using the [Haskell Platform](https://www.haskell.org/platform/). The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
 
+## Possible future enhancements
+
+* Add support for 64-bit GHC.
+* Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
+
 ## Building the Installer
 
 Users of the installer have no need to build it, these are mostly notes for developers of the installer. To build one of the installers:
@@ -39,8 +44,3 @@ Users of the installer have no need to build it, these are mostly notes for deve
 * Run `cabal install`.
 * Run `minghc-generate`. That will generate a file `.build/minghc-7.8.3.exe` (takes about 10 minutes).
 * To build for other versions of GHC, pass the version on the command line, for example `minghc-generate 7.6.3`.
-
-## Possible future enhancements
-
-* Add support for 64-bit GHC.
-* Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
