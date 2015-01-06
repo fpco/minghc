@@ -10,14 +10,17 @@ import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
 
-installer :: Bool -> (Program -> Version) -> String
-installer quick version = nsis $ do
+installer :: Arch -> Bool -> (Program -> Version) -> String
+installer arch quick version = nsis $ do
     forM_ [minBound..maxBound] $ \prog ->
         constant (upper $ show prog) (fromString $ version prog :: Exp String)
+    constant "ARCH" (fromString $ showArch arch :: Exp String)
 
-    name "MinGHC-$GHC"
-    outFile "minghc-$GHC.exe"
-    installDir "$PROGRAMFILES/MinGHC-$GHC"
+    name "MinGHC-$GHC-$ARCH"
+    outFile "minghc-$GHC-$ARCH.exe"
+    installDir $ case arch of
+        Arch32 -> "$PROGRAMFILES/MinGHC-$GHC"
+        Arch64 -> "$PROGRAMFILES64/MinGHC-$GHC"
     requestExecutionLevel Highest
     unless quick $ setCompressor LZMA [Solid]
 
@@ -42,7 +45,7 @@ installer quick version = nsis $ do
         writeUninstaller "uninstall.exe"
 
         file [Recursive] "bin/*"
-        file [Recursive] "ghc-$GHC/*"
+        file [Recursive] "ghc-$GHC-$ARCH/*"
         file [Recursive] "msys-$MSYS/*"
 
         createDirectory "$INSTDIR/switch"
