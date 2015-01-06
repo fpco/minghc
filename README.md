@@ -1,4 +1,4 @@
-# Minimum GHC Installer [![Build Status](https://img.shields.io/travis/snoyberg/minghc.svg?style=flat)](https://travis-ci.org/snoyberg/minghc)
+# Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
 This project provides a Windows installer with:
 
