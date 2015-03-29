@@ -6,7 +6,7 @@ This project provides a Windows installer with:
 * [Cabal](https://www.haskell.org/cabal/), so you can install Haskell packages.
 * [MSYS](http://www.mingw.org/wiki/MSYS), so packages with configure scripts (notably [network](https://hackage.haskell.org/package/network)) compile.
 
-It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.
+It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.  Some require [installing c libraries](docs/InstallingCLibs.md).
 
 
 ## Using the Installer
