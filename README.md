@@ -20,7 +20,9 @@ To use MinGHC, download and run the installer. There are two options you may wis
 * "Add programs to PATH" - select this if you want to make this version of GHC the standard one you use for general development. It will modify your `%PATH%` environment variable so the MinGHC installed copies of `ghc` and `cabal` are used by default.
 * "Add switcher to PATH" - select this if you want to use a different GHC normally, but occasionally switch to this version. After installation, type `minghc-7.8.3` at a command prompt to temporarily add the MinGHC copies of `ghc` and `cabal`.
 
-_Caveats:_ To build certain packages (e.g. [haskell-src-exts](https://hackage.haskell.org/package/haskell-src-exts)) you may need the tools [Happy](https://www.haskell.org/happy/) or [Alex](https://www.haskell.org/alex/) on your `%PATH%`. You can install these packages in the right place by typing `cabal install happy && cabal install alex`.
+_Caveats:_ 
+* To build certain packages (e.g. [haskell-src-exts](https://hackage.haskell.org/package/haskell-src-exts)) you may need the tools [Happy](https://www.haskell.org/happy/) or [Alex](https://www.haskell.org/alex/) on your `%PATH%`. Youc an install these packages in the right place by typing `cabal install happy && cabal install alex`.
+* The `network` library doesn't go good with [Cygwin](https://cygwin.com/). Hence, it is not recommended to use `cabal install` in Cygwin terminal: instead, use Command Prompt or Windows PowerShell.
 
 ### Older installer links
 
@@ -36,7 +38,6 @@ There are two existing ways to get GHC on Windows, straight from the [GHC distri
 
 * Add support for 64-bit GHC.
 * Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
-* Add support to `network` library on Cygwin  (see issue #33).
 
 ## Building the Installer
 
