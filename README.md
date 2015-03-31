@@ -22,7 +22,7 @@ To use MinGHC, download and run the installer. There are two options you may wis
 
 _Caveats:_ 
 * To build certain packages (e.g. [haskell-src-exts](https://hackage.haskell.org/package/haskell-src-exts)) you may need the tools [Happy](https://www.haskell.org/happy/) or [Alex](https://www.haskell.org/alex/) on your `%PATH%`. Youc an install these packages in the right place by typing `cabal install happy && cabal install alex`.
-* The `network` library doesn't go good with [Cygwin](https://cygwin.com/). Hence, it is not recommended to use `cabal install` in Cygwin terminal: instead, use Command Prompt or Windows PowerShell.
+* The `network` library doesn't go good with [Cygwin](https://cygwin.com/). Hence, it is not recommended to use `cabal install` in Cygwin terminal: instead, use Command Prompt (`cmd.exe`) or Windows PowerShell.
 
 ### Older installer links
 
