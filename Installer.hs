@@ -14,7 +14,8 @@ installer :: Arch -> Bool -> (Program -> Version) -> String
 installer arch quick version = nsis $ do
     forM_ [minBound..maxBound] $ \prog ->
         constant (upper $ show prog) (fromString $ version prog :: Exp String)
-    constant "ARCH" (fromString $ showArch arch :: Exp String)
+    constant "ARCH"      (fromString $ showArch arch     :: Exp String)
+    constant "ARCH_ABBR" (fromString $ showArchAbbr arch :: Exp String)
 
     name "MinGHC-$GHC-$ARCH"
     outFile "minghc-$GHC-$ARCH.exe"
@@ -49,7 +50,11 @@ installer arch quick version = nsis $ do
         file [Recursive] "msys-$MSYS/*"
 
         createDirectory "$INSTDIR/switch"
-        writeFileLines "$INSTDIR/switch/minghc-$GHC.bat" $
+
+        let scriptAliases = ["$INSTDIR/switch/minghc-$GHC.bat"
+                            ,"$INSTDIR/switch/minghc-$GHC-$ARCH_ABBR.bat"]
+
+        forM_ scriptAliases $ flip writeFileLines $
             ["set PATH=" & x & ";%PATH%" | x <- path] ++
             ["ghc --version"]
 
@@ -66,3 +71,8 @@ installer arch quick version = nsis $ do
         rmdir [Recursive] "$INSTDIR"
         -- make sure we don't remove $APPDATA/cabal/bin, since users may have had that on their $PATH before
         mapM_ (setEnvVarRemove HKCU "PATH") $ "$INSTDIR/switch" : tail path
+
+
+showArchAbbr :: Arch -> String
+showArchAbbr Arch32 = "32"
+showArchAbbr Arch64 = "64"
