@@ -36,6 +36,7 @@ There are two existing ways to get GHC on Windows, straight from the [GHC distri
 
 * Add support for 64-bit GHC.
 * Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
+* Add support to `network` library on Cygwin  (see issue #33).
 
 ## Building the Installer
 
