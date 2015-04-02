@@ -36,7 +36,6 @@ There are two existing ways to get GHC on Windows, straight from the [GHC distri
 
 ## Possible future enhancements
 
-* Add support for 64-bit GHC.
 * Add in C libraries to ease use of Haskell packages on Windows. Pull requests welcome.
 
 ## Building the Installer
@@ -44,7 +43,7 @@ There are two existing ways to get GHC on Windows, straight from the [GHC distri
 Users of the installer have no need to build it, these are mostly notes for developers of the installer. To build one of the installers:
 
 * Download [NSIS](http://nsis.sourceforge.net/) and put it on your `%PATH%`.
-* Make sure you have copies of `tar`, `wget`, `bunzip` and `gzip` on your `%PATH%`. For `tar`, a version of BSD Tar is recommended.
+* Make sure you have copies of `tar`, `wget`, `bunzip` and `gzip` on your `%PATH%`. For `tar`, a version of BSD Tar is recommended. ([GNU on Windows (GOW)](https://github.com/bmatzelle/gow) might help you here.)
 * Run `cabal install`.
 * Run `minghc-generate`. That will generate a file `.build/minghc-7.8.3.exe` (takes about 10 minutes).
 * To build for other versions of GHC, pass the version on the command line, for example `minghc-generate 7.6.3`.

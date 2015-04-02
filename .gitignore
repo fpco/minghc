@@ -1,2 +1,5 @@
 /.build/
 /dist/
+
+.cabal-sandbox/
+cabal.sandbox.config
