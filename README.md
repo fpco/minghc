@@ -12,6 +12,7 @@ It _does not_ provide all the packages included with the [Haskell Platform](http
 ## Using the Installer
 
 * [**Download installer with GHC 7.10.1 (32-bit)**](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.10.1-i386.exe)
+* [**Download installer with GHC 7.10.1 (64-bit)**](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.10.1-x86_64.exe)
 * [**Download installer with GHC 7.8.4 (64-bit)**](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.8.4-x86_64.exe)
 * [**Download installer with GHC 7.8.3 (32-bit)**](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghc-7.8.3.exe)
 
