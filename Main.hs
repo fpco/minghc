@@ -29,8 +29,8 @@ main = do
         "cabal-*.tar.gz" %> \out -> wget (source arch Cabal $ extractVersion out) out
         "ghc-*.tar.bz2" %> \out -> wget (source arch GHC $ extractVersion out) out
         "msys-*.zip" %> \out -> wget (source arch MSYS $ extractVersion out) out
-        "alex-*.exe" %> \out -> wget (source arch Alex $ extractVersion out) out
-        "happy-*.exe" %> \out -> wget (source arch Happy $ extractVersion out) out
+        "alex-*.zip" %> \out -> wget (source arch Alex $ extractVersion out) out
+        "happy-*.zip" %> \out -> wget (source arch Happy $ extractVersion out) out
 
         ".cabal-*" %> \out -> do
             let ver = extractVersion out
@@ -42,14 +42,16 @@ main = do
         ".alex-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            copyFile' ("alex-" ++ ver ++ ".exe") "bin/bin/alex.exe"
-            needed ["bin/bin/alex.exe"]
+            need ["alex-" ++ ver ++ ".zip"]
+            liftIO $ createDirectoryIfMissing True "bin/bin"
+            cmd "unzip" ["alex-" ++ ver ++ ".zip"] "-d" "bin/bin"
 
         ".happy-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            copyFile' ("happy-" ++ ver ++ ".exe") "bin/bin/happy.exe"
-            needed ["bin/bin/happy.exe"]
+            need ["happy-" ++ ver ++ ".zip"]
+            liftIO $ createDirectoryIfMissing True "bin/bin"
+            cmd "unzip" ["happy-" ++ ver ++ ".zip"] "-d" "bin/bin"
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out
