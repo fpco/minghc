@@ -6,9 +6,7 @@ import Development.Shake
 import Development.Shake.FilePath
 import Control.Exception.Extra
 import System.Console.GetOpt
-import Control.Monad.Extra
 import Data.List.Extra
-import Data.Char
 import System.Directory.Extra
 import Installer
 import Config
@@ -71,7 +69,6 @@ main = do
             cmd "unzip" ["msys-" ++ ver ++ ".zip"] "-d" ["msys-" ++ ver]
 
         "minghc-*.exe" %> \out -> do
-            let ver = extractVersion out
             need ["../Config.hs"]
             need $ [out -<.> "nsi"
                    ,".ghc-" ++ extractVersion out ++ "-" ++ showArch arch] ++
