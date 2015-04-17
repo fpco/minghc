@@ -50,7 +50,7 @@ installer arch quick version = nsis $ do
 
         createDirectory "$INSTDIR/switch"
 
-        let switcherAliases = [fromString ("$INSTDIR/switch/minghc" ++ x) | x <- switcherNameSuffixes]
+        let switcherAliases = [fromString ("$INSTDIR/switch/minghc" ++ x ++ ".bat") | x <- switcherNameSuffixes]
         forM_ switcherAliases $ flip writeFileLines $
             ["set PATH=" & x & ";%PATH%" | x <- path] ++
             ["ghc --version"]
