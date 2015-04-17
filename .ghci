@@ -1,0 +1,2 @@
+:set -fwarn-incomplete-patterns -fwarn-unused-binds -fwarn-unused-imports
+:load Main.hs
