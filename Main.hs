@@ -31,6 +31,7 @@ main = do
         "PortableGit-*.tar.bz2" %> \out -> wget (source arch Git $ extractVersion out) out
         "alex-*.zip" %> \out -> wget (source arch Alex $ extractVersion out) out
         "happy-*.zip" %> \out -> wget (source arch Happy $ extractVersion out) out
+        "stackage-cli-*.zip" %> \out -> wget (source arch Stackage $ extractVersion out) out
 
         ".cabal-*" %> \out -> do
             let ver = extractVersion out
@@ -52,6 +53,13 @@ main = do
             need ["happy-" ++ ver ++ ".zip"]
             liftIO $ createDirectoryIfMissing True "bin/bin"
             cmd "unzip" ["happy-" ++ ver ++ ".zip"] "-d" "bin/bin"
+
+        ".stackage-*" %> \out -> do
+            let ver = extractVersion out
+            writeFile' out ""
+            need ["stackage-cli-" ++ ver ++ ".zip"]
+            liftIO $ createDirectoryIfMissing True "bin/bin"
+            cmd "unzip" ["stackage-cli-" ++ ver ++ ".zip"] "-d" "bin/bin"
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out

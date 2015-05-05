@@ -16,7 +16,7 @@ showArch :: Arch -> String
 showArch Arch32 = "i386"
 showArch Arch64 = "x86_64"
 
-data Program = GHC | Cabal | Git | Alex | Happy deriving (Eq,Show,Enum,Bounded)
+data Program = GHC | Cabal | Git | Alex | Happy | Stackage deriving (Eq,Show,Enum,Bounded)
 
 type Version = String
 
@@ -27,6 +27,7 @@ defaultVersion Git = "2.4.0.1"
 defaultVersion Cabal = "1.22.2.0"
 defaultVersion Alex = "3.1.4"
 defaultVersion Happy = "1.19.5"
+defaultVersion Stackage = "20150505"
 
 source :: Arch -> Program -> Version -> String
 -- Official GHC release, available in xv and bz2, but the xv one is harder to extract on Windows systems
@@ -42,6 +43,7 @@ source _ Git ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/Port
 -- See: https://github.com/fpco/minghc/issues/24#issuecomment-91231733
 source _ Alex ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/alex-" ++ ver ++ ".zip"
 source _ Happy ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/happy-" ++ ver ++ ".zip"
+source _ Stackage ver = "https://s3.amazonaws.com/download.fpcomplete.com/minghc/stackage-cli-" ++ ver ++ ".zip"
 
 
 -- | Given a filename containing a version-like bit, extract the version
