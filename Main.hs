@@ -28,7 +28,7 @@ main = do
         let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
         "cabal-*.tar.gz" %> \out -> wget (source arch Cabal $ extractVersion out) out
         "ghc-*.tar.bz2" %> \out -> wget (source arch GHC $ extractVersion out) out
-        "msys-*.zip" %> \out -> wget (source arch MSYS $ extractVersion out) out
+        "PortableGit-*.tar.bz2" %> \out -> wget (source arch Git $ extractVersion out) out
         "alex-*.zip" %> \out -> wget (source arch Alex $ extractVersion out) out
         "happy-*.zip" %> \out -> wget (source arch Happy $ extractVersion out) out
 
@@ -62,13 +62,13 @@ main = do
             liftIO $ createDirectoryIfMissing True $ "ghc-" ++ verarch
             cmd "tar xf" ["ghc-" ++ verarch ++ ".tar.bz2"] "-C" ["ghc-" ++ verarch]
 
-        ".msys-*" %> \out -> do
+        ".git-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            need ["msys-" ++ ver ++ ".zip"]
-            liftIO $ ignore $ removeDirectoryRecursive $ "msys-" ++ ver
-            liftIO $ createDirectoryIfMissing True $ "msys-" ++ ver
-            cmd "unzip" ["msys-" ++ ver ++ ".zip"] "-d" ["msys-" ++ ver]
+            need ["PortableGit-" ++ ver ++ ".tar.xz"]
+            liftIO $ ignore $ removeDirectoryRecursive $ "PortableGit-" ++ ver
+            liftIO $ createDirectoryIfMissing True $ "PortableGit-" ++ ver
+            cmd "tar xf" ["PortableGit-" ++ ver ++ ".tar.bz2"] "-C" ["PortableGit-" ++ ver]
 
         "minghc-*.exe" %> \out -> do
             need ["../Config.hs"]

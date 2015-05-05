@@ -38,15 +38,17 @@ installer arch quick version = nsis $ do
             ,"$INSTDIR/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
             ,"$INSTDIR/ghc-$GHC/mingw/bin"
-            ,"$INSTDIR/msys-$MSYS/bin"]
+            ,"$INSTDIR/PortableGit-$GIT/usr/bin"
+            ,"$INSTDIR/PortableGit-$GIT/cmd"
+            ]
 
-    section "Install" [Required, Description "Install GHC, Cabal and MSYS"] $ do
+    section "Install" [Required, Description "Install GHC, Cabal and PortableGit"] $ do
         setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
         file [Recursive] "bin/*"
         file [Recursive] "ghc-$GHC-$ARCH/*"
-        file [Recursive] "msys-$MSYS/*"
+        file [Recursive] "PortableGit-$GIT/*"
 
         createDirectory "$INSTDIR/switch"
 
@@ -55,7 +57,7 @@ installer arch quick version = nsis $ do
             ["set PATH=" & x & ";%PATH%" | x <- path] ++
             ["ghc --version"]
 
-    section "Add programs to PATH" [Description "Put GHC, Cabal and MSYS on the %PATH%"] $ do
+    section "Add programs to PATH" [Description "Put GHC, Cabal and PortableGit on the %PATH%"] $ do
         -- Should use HKLM instead of HKCU for all but APPDATA.
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
