@@ -10,8 +10,8 @@ import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
 
-installer :: Arch -> Bool -> (Program -> Version) -> String
-installer arch quick version = nsis $ do
+installer :: Arch -> (Program -> Version) -> String
+installer arch version = nsis $ do
     forM_ [minBound..maxBound] $ \prog ->
         constant (upper $ show prog) (fromString $ version prog :: Exp String)
     constant "ARCH" (fromString $ showArch arch :: Exp String)
@@ -20,7 +20,6 @@ installer arch quick version = nsis $ do
     outFile "minghc-$GHC-$ARCH.exe"
     installDir "$APPDATA/minghc-$GHC-$ARCH"
     requestExecutionLevel Highest
-    --unless quick $ setCompressor LZMA [Solid]
 
     page Components
     page Directory

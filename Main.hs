@@ -11,11 +11,9 @@ import System.Directory.Extra
 import Installer
 import Config
 
-
-data Flags = Quick | Flag64 deriving Eq
+data Flags = Flag64 deriving Eq
 flags =
-    [ Option "" ["quick"] (NoArg $ Right Quick) "Build without solid compression."
-    , Option "" ["arch64"] (NoArg $ Right Flag64) "Use 64-bit GHC."
+    [ Option "" ["arch64"] (NoArg $ Right Flag64) "Use 64-bit GHC."
     ]
 
 main :: IO ()
@@ -76,5 +74,5 @@ main = do
 
         "minghc-*.nsi" %> \out -> do
             need ["../Installer.hs","../Config.hs"]
-            writeFile' out $ installer arch (Quick `elem` flags) $
+            writeFile' out $ installer arch $
                 \prog -> if prog == GHC then extractVersion out else defaultVersion prog
