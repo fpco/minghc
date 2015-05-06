@@ -44,6 +44,7 @@ Users of the installer have no need to build it, these are mostly notes for deve
 
 * Download [NSIS](http://nsis.sourceforge.net/) and put it on your `%PATH%`.
 * Make sure you have copies of `tar`, `wget`, `bunzip` and `gzip` on your `%PATH%`. For `tar`, a version of BSD Tar is recommended. ([GNU on Windows (GOW)](https://github.com/bmatzelle/gow) might help you here.)
+    * For convenience, you could consider using the [minimal dependency bundle](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghcdeps-bin.zip), which includes all the necessary tools.
 * Run `cabal install`.
 * Run `minghc-generate`. That will generate a file `.build/minghc-7.8.3.exe` (takes about 10 minutes).
 * To build for other versions of GHC, pass the version on the command line, for example `minghc-generate 7.6.3`.
