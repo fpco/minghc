@@ -6,49 +6,68 @@ import           Prelude                      (Bool (..), FilePath, elem, error,
                                                filter, fmap, getLine, lines,
                                                mapM_, null, putStr, putStrLn,
                                                return, show, snd, unwords, ($),
-                                               (++), (.), (/=), (<), (>>=))
+                                               (++), (.), (/=), (<), (==),
+                                               (>>=))
 import           System.Directory             (doesFileExist,
                                                getAppUserDataDirectory,
                                                getDirectoryContents, removeFile)
-import           System.Environment           (getExecutablePath)
+import           System.Environment           (getArgs, getExecutablePath)
 import           System.Exit                  (ExitCode (ExitSuccess))
 import           System.FilePath              (splitExtension, takeDirectory,
-                                               (</>))
+                                               takeExtension, (</>))
 import           System.IO                    (IO, hFlush, stdout)
 import           System.Process               (rawSystem, readProcess)
 import           Text.ParserCombinators.ReadP (readP_to_S)
 
 main :: IO ()
 main = do
+    args <- getArgs
+    putStrLn $ show args
     binPath <- fmap takeDirectory getExecutablePath
     let sevenz = binPath </> "7z.exe"
-        un7zDir dir =
-            getDirectoryContents dir >>= mapM_ (un7z binPath sevenz)
-    un7zDir binPath
-    un7zDir $ takeDirectory binPath
+    getDirectoryContents binPath
+        >>= mapM_ (un7z binPath sevenz . (binPath </>))
+
+    mapM_ (handleArg sevenz) args
     removeOldCabal (binPath </> "cabal.exe")
 
-un7z :: FilePath -- ^ bin path
+handleArg
+    :: FilePath -- ^ 7z.exe
+    -> FilePath -- ^ command line argument
+    -> IO ()
+handleArg sevenz arg = do
+    putStrLn $ show (sevenz, arg, base, ext)
+    case ext of
+        ".7z" -> un7z base sevenz arg
+        ".xz" -> do
+            un7z (takeDirectory base) sevenz arg
+            handleArg sevenz base
+        ".tar" -> un7z (takeDirectory base) sevenz arg
+        _ -> error $ "handleArg: " ++ show (sevenz, arg, base, ext)
+  where
+    (base, ext) = splitExtension arg
+
+un7z :: FilePath -- ^ dest path
      -> FilePath -- ^ 7z.exe
      -> FilePath -- ^ to be unpacked
      -> IO ()
-un7z binPath sevenz =
-    go . (binPath </>)
+un7z destPath sevenz =
+    go
   where
-    go fp = when toUn7z $ do
-        putStrLn $ "Decompressing " ++ fp
+    exts = [".7z", ".xz", ".tar"]
+    go fp = when (ext `elem` exts) $ do
+        putStrLn $ "Decompressing " ++ fp ++ " to " ++ destPath
         ec <- rawSystem sevenz
             [ "x"
-            , "-o" ++ binPath
+            , "-o" ++ destPath
             , "-y"
             , fp
             ]
         removeFile fp
         when (ec /= ExitSuccess)
             $ error $ "Could not decompress: " ++ fp
-        go base
       where
-        (base, ext) = splitExtension fp
+        ext = takeExtension fp
 
         toUn7z = ext `elem`
             [ ".7z"

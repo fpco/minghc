@@ -7,7 +7,7 @@ import Development.Shake.FilePath
 import Control.Exception.Extra
 import System.Console.GetOpt
 import Data.List.Extra
-import System.Directory.Extra
+import System.Directory.Extra as D
 import Installer
 import Config
 import Network.HTTP.Client
@@ -21,18 +21,34 @@ flags =
     [ Option "" ["arch64"] (NoArg $ Right Flag64) "Use 64-bit GHC."
     ]
 
+replaceDir :: FilePath -> FilePath -> IO ()
+replaceDir src dest = do
+    exists <- D.doesDirectoryExist dest
+    when exists $ D.removeDirectoryRecursive dest
+    createDirectoryIfMissing True dest
+
+    contents <- D.getDirectoryContents src
+    forM_ contents $ \base -> do
+        let fp = src </> base
+        exists' <- D.doesFileExist fp
+        when exists' $ copyFile fp (dest </> base)
+
 main :: IO ()
 main = do
     man <- newManager tlsManagerSettings
-    createDirectoryIfMissing True ".build/bin/bin"
+
+    replaceDir "bin" ".build/bin/bin"
+
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         let arch = if Flag64 `elem` flags then Arch64 else Arch32
         want ["minghc-" ++ v ++ "-" ++ showArch arch ++ ".exe" | v <- if null ver then [defaultVersion GHC] else ver]
 
         let fetch from to = liftIO $ do
+                putStrLn $ "Downloading " ++ from
+                let tmp = to <.> "tmp"
                 req <- parseUrl from
                 withResponse req man $
-                    \res -> withBinaryFile to WriteMode $
+                    \res -> withBinaryFile tmp WriteMode $
                     \h -> do
                         let loop = do
                                 bs <- brRead $ responseBody res
@@ -40,34 +56,9 @@ main = do
                                     S.hPut h bs
                                     loop
                         loop
-        "ghc-*.7z" %> \out -> fetch (source arch GHC $ extractVersion out) out
-        "minghcbin-*.7z" %> \out -> fetch (source arch Minghcbin $ extractVersion out) out
-        "PortableGit-*.7z.exe" %> \out -> fetch (source arch Git $ extractVersion out) out
-        "7z.exe" %> \out -> fetch (source arch SevenZexe $ extractVersion out) out
-        "7z.dll" %> \out -> fetch (source arch SevenZdll $ extractVersion out) out
-
-        ".sevenzexe-*" %> \out -> do
-            let ver = extractVersion out
-            writeFile' out ""
-            need ["7z.exe"]
-
-            liftIO $ do
-                createDirectoryIfMissing True "bin/bin"
-                copyFile "7z.exe" "bin/bin/7z.exe"
-
-        ".sevenzdll-*" %> \out -> do
-            let ver = extractVersion out
-            writeFile' out ""
-            need ["7z.dll"]
-
-            liftIO $ do
-                createDirectoryIfMissing True "bin/bin"
-                copyFile "7z.dll" "bin/bin/7z.dll"
-
-        ".minghcbin-*" %> \out -> do
-            let ver = extractVersion out
-            writeFile' out ""
-            need ["minghcbin-" ++ ver ++ ".7z"]
+                renameFile tmp to
+        "ghc-*.tar.xz" %> \out -> fetch (source arch GHC $ extractVersion out) out
+        "git-*.7z" %> \out -> fetch (source arch Git $ extractVersion out) out
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out
@@ -81,11 +72,9 @@ main = do
             need ["PortableGit-" ++ ver ++ ".7z.exe"]
 
         "minghc-*.exe" %> \out -> do
-            need ["../Config.hs"]
-            need $ [out -<.> "nsi"
-                   ,".ghc-" ++ extractVersion out ++ "-" ++ showArch arch] ++
-                   ["." ++ lower (show prog) ++ "-" ++ defaultVersion prog
-                   | prog <- [minBound..maxBound], prog /= GHC]
+            let ghcVer = extractVersion out
+            need ["../Config.hs", "../Main.hs", out -<.> "nsi"]
+            need $ map (dest ghcVer arch) [minBound..maxBound]
             cmd "makensis -V3" [out -<.> "nsi"]
 
         "minghc-*.nsi" %> \out -> do

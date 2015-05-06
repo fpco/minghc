@@ -35,22 +35,26 @@ installer arch version = nsis $ do
             ,"$INSTDIR/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
             ,"$INSTDIR/ghc-$GHC/mingw/bin"
-            ,"$INSTDIR/PortableGit-$GIT/usr/bin"
-            ,"$INSTDIR/PortableGit-$GIT/cmd"
+            ,"$INSTDIR/git-$GIT/usr/bin"
+            ,"$INSTDIR/git-$GIT/cmd"
             ]
 
     section "Install" [Required, Description "Install GHC, Cabal and PortableGit"] $ do
         setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
-        file [] "ghc-$GHC-$ARCH.7z"
-        file [] "minghcbin-$MINGHCBIN.7z"
-        file [] "PortableGit-$GIT.7z.exe"
+        let rootArchives = map (dest "$GHC" arch) [minBound..maxBound]
+        mapM_ (file [] . fromString) rootArchives
         file [Recursive] "bin/*"
 
-        execWait "$INSTDIR/bin/7z.exe x -y \"-o$INSTDIR\" \"$INSTDIR/ghc-$GHC-$ARCH.7z\""
-        execWait "$INSTDIR/bin/7z.exe x -y \"-o$INSTDIR/bin\" \"$INSTDIR/minghcbin-$MINGHCBIN.7z\""
-        execWait "$INSTDIR/bin/7z.exe x -y \"-o$INSTDIR/PortableGit-$GIT\" \"$INSTDIR/PortableGit-$GIT.7z.exe\""
+        execWait "\"$INSTDIR/bin/7z.exe\" x -y \"-o$INSTDIR/bin\" \"$INSTDIR/bin/minghc-post-install.exe.7z\""
+        Development.NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe.7z"
+        let quote :: String -> String
+            quote x = concat ["\"", x, "\""]
+        execWait $ fromString $ unwords $ map quote
+            $ "$INSTDIR/bin/minghc-post-install.exe"
+            : rootArchives
+        Development.NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe"
 
         createDirectory "$INSTDIR/switch"
 
