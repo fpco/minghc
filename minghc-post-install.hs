@@ -1,14 +1,15 @@
 -- Note: we should only depend on libraries that ship with GHC for this. No
 -- external dependencies!
+import Prelude ((++), lines, unwords, ($), (.), null, error, Bool (..), show, snd, filter, elem, (/=), (<), fmap, (>>=), mapM_, return, putStrLn, FilePath, putStr, getLine)
 import System.Environment (getExecutablePath)
-import System.FilePath
-import System.Directory
-import Control.Monad
-import Data.Version
-import System.Process
-import Text.ParserCombinators.ReadP
-import System.IO
-import System.Exit
+import System.FilePath (takeDirectory, (</>), splitExtension)
+import System.Directory (doesFileExist, removeFile, getAppUserDataDirectory, getDirectoryContents)
+import Control.Monad (when)
+import Data.Version (Version, parseVersion)
+import System.Process (rawSystem, readProcess)
+import Text.ParserCombinators.ReadP (readP_to_S)
+import System.IO (IO, stdout, hFlush)
+import System.Exit (ExitCode (ExitSuccess))
 
 main :: IO ()
 main = do
