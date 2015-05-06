@@ -28,7 +28,7 @@ main = do
         let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
         "cabal-*.tar.gz" %> \out -> wget (source arch Cabal $ extractVersion out) out
         "ghc-*.tar.bz2" %> \out -> wget (source arch GHC $ extractVersion out) out
-        "PortableGit-*.tar.bz2" %> \out -> wget (source arch Git $ extractVersion out) out
+        "PortableGit-*.7z.exe" %> \out -> wget (source arch Git $ extractVersion out) out
         "alex-*.zip" %> \out -> wget (source arch Alex $ extractVersion out) out
         "happy-*.zip" %> \out -> wget (source arch Happy $ extractVersion out) out
         "stackage-cli-*.zip" %> \out -> wget (source arch Stackage $ extractVersion out) out
@@ -73,10 +73,10 @@ main = do
         ".git-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            need ["PortableGit-" ++ ver ++ ".tar.xz"]
+            need ["PortableGit-" ++ ver ++ ".7z.exe"]
             liftIO $ ignore $ removeDirectoryRecursive $ "PortableGit-" ++ ver
             liftIO $ createDirectoryIfMissing True $ "PortableGit-" ++ ver
-            cmd "tar xf" ["PortableGit-" ++ ver ++ ".tar.bz2"] "-C" ["PortableGit-" ++ ver]
+            cmd "7z x -y" ["PortableGit-" ++ ver ++ ".7z.exe"] ["-oPortableGit-" ++ ver]
 
         "minghc-*.exe" %> \out -> do
             need ["../Config.hs"]
