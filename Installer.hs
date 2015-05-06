@@ -22,7 +22,7 @@ installer arch quick version = nsis $ do
         Arch32 -> "$PROGRAMFILES/MinGHC-$GHC"
         Arch64 -> "$PROGRAMFILES64/MinGHC-$GHC"
     requestExecutionLevel Highest
-    unless quick $ setCompressor LZMA [Solid]
+    --unless quick $ setCompressor LZMA [Solid]
 
     page Components
     page Directory
@@ -38,17 +38,22 @@ installer arch quick version = nsis $ do
             ,"$INSTDIR/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
             ,"$INSTDIR/ghc-$GHC/mingw/bin"
-            ,"$INSTDIR/PortableGit-$GIT/usr/bin"
-            ,"$INSTDIR/PortableGit-$GIT/cmd"
+            ,"$APPDATA/PortableGit-$GIT/usr/bin"
+            ,"$APPDATA/PortableGit-$GIT/cmd"
             ]
 
     section "Install" [Required, Description "Install GHC, Cabal and PortableGit"] $ do
         setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
+        file [] "ghc-$GHC-$ARCH.7z"
+        file [] "minghcbin-$MINGHCBIN.7z"
+        file [] "PortableGit-$GIT.7z.exe"
         file [Recursive] "bin/*"
-        file [Recursive] "ghc-$GHC-$ARCH/*"
-        file [Recursive] "PortableGit-$GIT/*"
+
+        execWait "$INSTDIR/bin/7z.exe x -y \"-o$INSTDIR\" \"$INSTDIR/ghc-$GHC-$ARCH.7z\""
+        execWait "$INSTDIR/bin/7z.exe x -y \"-o$INSTDIR/bin\" \"$INSTDIR/minghcbin-$MINGHCBIN.7z\""
+        execWait "$INSTDIR/bin/7z.exe x -y \"-o$APPDATA/PortableGit-$GIT\" \"$INSTDIR/PortableGit-$GIT.7z.exe\""
 
         createDirectory "$INSTDIR/switch"
 

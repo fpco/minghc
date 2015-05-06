@@ -26,57 +26,45 @@ main = do
         want ["minghc-" ++ v ++ "-" ++ showArch arch ++ ".exe" | v <- if null ver then [defaultVersion GHC] else ver]
 
         let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
-        "cabal-*.tar.gz" %> \out -> wget (source arch Cabal $ extractVersion out) out
-        "ghc-*.tar.bz2" %> \out -> wget (source arch GHC $ extractVersion out) out
+        "ghc-*.7z" %> \out -> wget (source arch GHC $ extractVersion out) out
+        "minghcbin-*.7z" %> \out -> wget (source arch Minghcbin $ extractVersion out) out
         "PortableGit-*.7z.exe" %> \out -> wget (source arch Git $ extractVersion out) out
-        "alex-*.zip" %> \out -> wget (source arch Alex $ extractVersion out) out
-        "happy-*.zip" %> \out -> wget (source arch Happy $ extractVersion out) out
-        "stackage-cli-*.zip" %> \out -> wget (source arch Stackage $ extractVersion out) out
+        "7z.exe" %> \out -> wget (source arch SevenZexe $ extractVersion out) out
+        "7z.dll" %> \out -> wget (source arch SevenZdll $ extractVersion out) out
 
-        ".cabal-*" %> \out -> do
+        ".sevenzexe-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            need ["cabal-" ++ ver ++ ".tar.gz"]
-            unit $ cmd "tar zxfv" ["cabal-" ++ ver ++ ".tar.gz"] "-C" ["bin/bin"]
-            needed ["bin/bin/cabal.exe"] -- make sure that we check we have this version in PATH
+            need ["7z.exe"]
 
-        ".alex-*" %> \out -> do
+            liftIO $ do
+                createDirectoryIfMissing True "bin/bin"
+                copyFile "7z.exe" "bin/bin/7z.exe"
+
+        ".sevenzdll-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            need ["alex-" ++ ver ++ ".zip"]
-            liftIO $ createDirectoryIfMissing True "bin/bin"
-            cmd "unzip" ["alex-" ++ ver ++ ".zip"] "-d" "bin/bin"
+            need ["7z.dll"]
 
-        ".happy-*" %> \out -> do
+            liftIO $ do
+                createDirectoryIfMissing True "bin/bin"
+                copyFile "7z.dll" "bin/bin/7z.dll"
+
+        ".minghcbin-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
-            need ["happy-" ++ ver ++ ".zip"]
-            liftIO $ createDirectoryIfMissing True "bin/bin"
-            cmd "unzip" ["happy-" ++ ver ++ ".zip"] "-d" "bin/bin"
-
-        ".stackage-*" %> \out -> do
-            let ver = extractVersion out
-            writeFile' out ""
-            need ["stackage-cli-" ++ ver ++ ".zip"]
-            liftIO $ createDirectoryIfMissing True "bin/bin"
-            cmd "unzip" ["stackage-cli-" ++ ver ++ ".zip"] "-d" "bin/bin"
+            need ["minghcbin-" ++ ver ++ ".7z"]
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out
                 verarch = ver ++ "-" ++ showArch arch
             writeFile' out ""
-            need ["ghc-" ++ verarch ++ ".tar.bz2"]
-            liftIO $ ignore $ removeDirectoryRecursive $ "ghc-" ++ verarch
-            liftIO $ createDirectoryIfMissing True $ "ghc-" ++ verarch
-            cmd "tar xf" ["ghc-" ++ verarch ++ ".tar.bz2"] "-C" ["ghc-" ++ verarch]
+            need ["ghc-" ++ verarch ++ ".7z"]
 
         ".git-*" %> \out -> do
             let ver = extractVersion out
             writeFile' out ""
             need ["PortableGit-" ++ ver ++ ".7z.exe"]
-            liftIO $ ignore $ removeDirectoryRecursive $ "PortableGit-" ++ ver
-            liftIO $ createDirectoryIfMissing True $ "PortableGit-" ++ ver
-            cmd "7z x -y" ["PortableGit-" ++ ver ++ ".7z.exe"] ["-oPortableGit-" ++ ver]
 
         "minghc-*.exe" %> \out -> do
             need ["../Config.hs"]
