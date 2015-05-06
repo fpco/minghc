@@ -29,7 +29,10 @@ executable minghc-generate
         directory,
         extra >= 0.8,
         shake >= 0.14,
-        nsis >= 0.2.4
+        nsis >= 0.2.4,
+        bytestring,
+        http-client,
+        http-client-tls
 
     other-modules:
         Installer

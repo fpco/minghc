@@ -10,6 +10,11 @@ import Data.List.Extra
 import System.Directory.Extra
 import Installer
 import Config
+import Network.HTTP.Client
+import Network.HTTP.Client.TLS
+import System.IO
+import qualified Data.ByteString as S
+import Control.Monad
 
 data Flags = Flag64 deriving Eq
 flags =
@@ -18,17 +23,28 @@ flags =
 
 main :: IO ()
 main = do
+    man <- newManager tlsManagerSettings
     createDirectoryIfMissing True ".build/bin/bin"
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         let arch = if Flag64 `elem` flags then Arch64 else Arch32
         want ["minghc-" ++ v ++ "-" ++ showArch arch ++ ".exe" | v <- if null ver then [defaultVersion GHC] else ver]
 
-        let wget from to = unit $ cmd "wget --no-check-certificate" [from] "-O" [to]
-        "ghc-*.7z" %> \out -> wget (source arch GHC $ extractVersion out) out
-        "minghcbin-*.7z" %> \out -> wget (source arch Minghcbin $ extractVersion out) out
-        "PortableGit-*.7z.exe" %> \out -> wget (source arch Git $ extractVersion out) out
-        "7z.exe" %> \out -> wget (source arch SevenZexe $ extractVersion out) out
-        "7z.dll" %> \out -> wget (source arch SevenZdll $ extractVersion out) out
+        let fetch from to = liftIO $ do
+                req <- parseUrl from
+                withResponse req man $
+                    \res -> withBinaryFile to WriteMode $
+                    \h -> do
+                        let loop = do
+                                bs <- brRead $ responseBody res
+                                unless (S.null bs) $ do
+                                    S.hPut h bs
+                                    loop
+                        loop
+        "ghc-*.7z" %> \out -> fetch (source arch GHC $ extractVersion out) out
+        "minghcbin-*.7z" %> \out -> fetch (source arch Minghcbin $ extractVersion out) out
+        "PortableGit-*.7z.exe" %> \out -> fetch (source arch Git $ extractVersion out) out
+        "7z.exe" %> \out -> fetch (source arch SevenZexe $ extractVersion out) out
+        "7z.dll" %> \out -> fetch (source arch SevenZdll $ extractVersion out) out
 
         ".sevenzexe-*" %> \out -> do
             let ver = extractVersion out
