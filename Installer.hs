@@ -18,7 +18,8 @@ installer arch version = nsis $ do
 
     name "MinGHC-$GHC-$ARCH"
     outFile "minghc-$GHC-$ARCH.exe"
-    installDir "$APPDATA/minghc-$GHC-$ARCH"
+    -- See: http://stackoverflow.com/questions/1831810/is-appdata-now-the-correct-place-to-install-user-specific-apps-which-modify-t/1845459#1845459
+    installDir "$LOCALAPPDATA/Programs/minghc-$GHC-$ARCH"
     requestExecutionLevel Highest
 
     page Components
