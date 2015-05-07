@@ -31,12 +31,12 @@ installer arch version = nsis $ do
     -- meaning it ends up being on the PATH lower-priority than our stuff,
     -- since the user may have their own old version of cabal in $INSTDIR
     let path =
-            ["$APPDATA/cabal/bin"
-            ,"$INSTDIR/bin"
+            ["$INSTDIR/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
             ,"$INSTDIR/ghc-$GHC/mingw/bin"
             ,"$INSTDIR/git-$GIT/usr/bin"
             ,"$INSTDIR/git-$GIT/cmd"
+            ,"$APPDATA/cabal/bin"
             ]
 
     section "Install" [Required, Description "Install GHC, Cabal and PortableGit"] $ do
