@@ -3,3 +3,8 @@
 
 .cabal-sandbox/
 cabal.sandbox.config
+
+*.swp
+*.exe
+*.hi
+*.o

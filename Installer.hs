@@ -10,19 +10,16 @@ import Development.NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
 
-installer :: Arch -> Bool -> (Program -> Version) -> String
-installer arch quick version = nsis $ do
+installer :: Arch -> (Program -> Version) -> String
+installer arch version = nsis $ do
     forM_ [minBound..maxBound] $ \prog ->
         constant (upper $ show prog) (fromString $ version prog :: Exp String)
     constant "ARCH" (fromString $ showArch arch :: Exp String)
 
     name "MinGHC-$GHC-$ARCH"
     outFile "minghc-$GHC-$ARCH.exe"
-    installDir $ case arch of
-        Arch32 -> "$PROGRAMFILES/MinGHC-$GHC"
-        Arch64 -> "$PROGRAMFILES64/MinGHC-$GHC"
-    requestExecutionLevel Highest
-    unless quick $ setCompressor LZMA [Solid]
+    -- See: http://stackoverflow.com/questions/1831810/is-appdata-now-the-correct-place-to-install-user-specific-apps-which-modify-t/1845459#1845459
+    installDir "$LOCALAPPDATA/Programs/minghc-$GHC-$ARCH"
 
     page Components
     page Directory
@@ -34,19 +31,30 @@ installer arch quick version = nsis $ do
     -- meaning it ends up being on the PATH lower-priority than our stuff,
     -- since the user may have their own old version of cabal in $INSTDIR
     let path =
-            ["$APPDATA/cabal/bin"
-            ,"$INSTDIR/bin"
+            ["$INSTDIR/bin"
             ,"$INSTDIR/ghc-$GHC/bin"
             ,"$INSTDIR/ghc-$GHC/mingw/bin"
-            ,"$INSTDIR/msys-$MSYS/bin"]
+            ,"$INSTDIR/git-$GIT/usr/bin"
+            ,"$INSTDIR/git-$GIT/cmd"
+            ,"$APPDATA/cabal/bin"
+            ]
 
-    section "Install" [Required, Description "Install GHC, Cabal and MSYS"] $ do
+    section "Install" [Required, Description "Install GHC, Cabal and PortableGit"] $ do
         setOutPath "$INSTDIR"
         writeUninstaller "uninstall.exe"
 
+        let rootArchives = map (dest "$GHC" arch) [minBound..maxBound]
+        mapM_ (file [] . fromString) rootArchives
         file [Recursive] "bin/*"
-        file [Recursive] "ghc-$GHC-$ARCH/*"
-        file [Recursive] "msys-$MSYS/*"
+
+        execWait "\"$INSTDIR/bin/7z.exe\" x -y \"-o$INSTDIR/bin\" \"$INSTDIR/bin/minghc-post-install.exe.7z\""
+        Development.NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe.7z"
+        let quote :: String -> String
+            quote x = concat ["\"", x, "\""]
+        execWait $ fromString $ unwords $ map quote
+            $ "$INSTDIR/bin/minghc-post-install.exe"
+            : rootArchives
+        Development.NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe"
 
         createDirectory "$INSTDIR/switch"
 
@@ -55,7 +63,7 @@ installer arch quick version = nsis $ do
             ["set PATH=" & x & ";%PATH%" | x <- path] ++
             ["ghc --version"]
 
-    section "Add programs to PATH" [Description "Put GHC, Cabal and MSYS on the %PATH%"] $ do
+    section "Add programs to PATH" [Description "Put GHC, Cabal and PortableGit on the %PATH%"] $ do
         -- Should use HKLM instead of HKCU for all but APPDATA.
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
