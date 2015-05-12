@@ -3,15 +3,16 @@
 Some cabal packages, including some in the Haskell Platform, need C librarires to build and install.  Currently there is no automatic tool for this, so you will have to do it manually.
 
 ## MinGHC Default Directories
-
-- 32bit Install (on 64bit system)
-  - C:\Program Files (x86)\MinGHC-x.y.z\ghc.x.y.z\mingw\include\
-  - C:\Program Files (x86)\MinGHC-x.y.z\ghc.x.y.z\mingw\lib\
-  - C:\Windows\System32\ (DLLs, if not in program directory)
+Note: %LOCALAPPDATA% is `C:\Users\<user name>\AppData\Local\` in Windows 7 and above
+- 32bit Install
+  - `%LOCALAPPDATA%\Programs\minghc-x.y.z-i386\ghc.x.y.z\mingw\include\`
+  - `%LOCALAPPDATA%\Programs\minghc-x.y.z-i386\ghc.x.y.z\mingw\lib\`
+  - `C:\Windows\System32\` (DLLs, if not in program directory)
 - 64bit Install
-  - C:\Program Files (x86)\MinGHC-x.y.z\ghc.x.y.z\mingw\x86_64-w64-mingw32\include\
-  - C:\Program Files (x86)\MinGHC-x.y.z\ghc.x.y.z\mingw\x86_64-w64-mingw32\lib\
-  - C:\Windows\SysWOW64\ (DLLs, if not in program directory)
+  - `%LOCALAPPDATA%\Programs\minghc-x.y.z-x86_64\ghc.x.y.z\mingw\x86_64-w64-mingw32\include\`
+  - `%LOCALAPPDATA%\Programs\minghc-x.y.z-x86_64\ghc.x.y.z\mingw\x86_64-w64-mingw32\lib\`
+  - `C:\Windows\SysWOW64\` (DLLs, if not in program directory)
+
 
 ## Installing GLUT
 
