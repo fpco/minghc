@@ -6,20 +6,22 @@ import Config
 import Control.Monad
 import Data.String
 import Data.List.Extra
-import Development.NSIS
+import Development.NSIS as NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
 
 installer :: Arch -> (Program -> Version) -> String
 installer arch version = nsis $ do
     forM_ [minBound..maxBound] $ \prog ->
-        constant (upper $ show prog) (fromString $ version prog :: Exp String)
-    constant "ARCH" (fromString $ showArch arch :: Exp String)
+        constantStr (upper $ show prog) (fromString $ version prog)
+    constantStr "ARCH"    (fromString $ showArch arch)
+    constantStr "APPNAME" "MinGHC-$GHC-$ARCH"
 
-    name "MinGHC-$GHC-$ARCH"
+    name "$APPNAME"
     outFile "minghc-$GHC-$ARCH.exe"
     -- See: http://stackoverflow.com/questions/1831810/is-appdata-now-the-correct-place-to-install-user-specific-apps-which-modify-t/1845459#1845459
     installDir "$LOCALAPPDATA/Programs/minghc-$GHC-$ARCH"
+    uninstallIcon "$NSISDIR/contrib/graphics/icons/win-uninstall.ico"
 
     page Components
     page Directory
@@ -27,34 +29,36 @@ installer arch version = nsis $ do
     unpage Confirm
     unpage InstFiles
 
-    -- important that $APPDATA/cabal/bin is first because we prepend to the PATH
-    -- meaning it ends up being on the PATH lower-priority than our stuff,
-    -- since the user may have their own old version of cabal in $INSTDIR
-    let path =
-            ["$INSTDIR/bin"
-            ,"$INSTDIR/ghc-$GHC/bin"
-            ,"$INSTDIR/ghc-$GHC/mingw/bin"
-            ,"$INSTDIR/git-$GIT/usr/bin"
-            ,"$INSTDIR/git-$GIT/cmd"
-            ,"$APPDATA/cabal/bin"
-            ]
+                         -- Precedence: low to high
+    let pathAddRemove    = ["$INSTDIR/bin"
+                           ,"$INSTDIR/ghc-$GHC/bin"
+                           ,"$INSTDIR/ghc-$GHC/mingw/bin"
+                           ,"$INSTDIR/git-$GIT/usr/bin"
+                           ,"$INSTDIR/git-$GIT/cmd"
+                           ]
+    let pathPreExisting  = ["$APPDATA/cabal/bin"]
 
-    section "Install" [Required, Description "Install GHC, Cabal and PortableGit"] $ do
+    -- (potentially) preexisting paths should precede (i.e. have lower precedence than) new paths
+    let path             = pathPreExisting ++ pathAddRemove
+
+    let uninstallRegKey = (HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\$APPNAME")
+
+    section "Install" [Required, Description "Install GHC, Cabal, and PortableGit"] $ do
         setOutPath "$INSTDIR"
-        writeUninstaller "uninstall.exe"
+        buildUninstaller uninstallRegKey
 
         let rootArchives = map (dest "$GHC" arch) [minBound..maxBound]
         mapM_ (file [] . fromString) rootArchives
         file [Recursive] "bin/*"
 
         execWait "\"$INSTDIR/bin/7z.exe\" x -y \"-o$INSTDIR/bin\" \"$INSTDIR/bin/minghc-post-install.exe.7z\""
-        Development.NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe.7z"
+        NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe.7z"
         let quote :: String -> String
             quote x = concat ["\"", x, "\""]
         execWait $ fromString $ unwords $ map quote
             $ "$INSTDIR/bin/minghc-post-install.exe"
             : rootArchives
-        Development.NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe"
+        NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe"
 
         createDirectory "$INSTDIR/switch"
 
@@ -63,7 +67,7 @@ installer arch version = nsis $ do
             ["set PATH=" & x & ";%PATH%" | x <- path] ++
             ["ghc --version"]
 
-    section "Add programs to PATH" [Description "Put GHC, Cabal and PortableGit on the %PATH%"] $ do
+    section "Add programs to PATH" [Description "Put GHC, Cabal, and PortableGit on the %PATH%"] $ do
         -- Should use HKLM instead of HKCU for all but APPDATA.
         -- However, we need to ensure that the APPDATA path comes first.
         -- And this is the only way I could make that happen.
@@ -74,8 +78,9 @@ installer arch version = nsis $ do
 
     uninstall $ do
         rmdir [Recursive] "$INSTDIR"
-        -- make sure we don't remove $APPDATA/cabal/bin, since users may have had that on their $PATH before
-        mapM_ (setEnvVarRemove HKCU "PATH") $ "$INSTDIR/switch" : tail path
+        mapM_ (setEnvVarRemove HKCU "PATH") $ "$INSTDIR/switch" : pathAddRemove
+
+        uncurry deleteRegKey uninstallRegKey
 
     where
         switcherNameSuffixes
@@ -86,6 +91,24 @@ installer arch version = nsis $ do
                 ,[version GHC, showArchAbbr arch]
                 ,[majorVersion (version GHC)]
                 ,[majorVersion (version GHC), showArchAbbr arch]]
+
+        buildUninstaller uninstallRegKey = do
+          let uninstaller = "uninstall.exe"
+          writeUninstaller uninstaller
+
+          let setUninstallStr   = uncurry writeRegStr   uninstallRegKey
+          let setUninstallDWORD = uncurry writeRegDWORD uninstallRegKey
+
+          -- See possible settings here: http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
+          setUninstallStr   "DisplayName"     "$APPNAME"
+          setUninstallStr   "UninstallString" ("$INSTDIR/" & uninstaller)
+          setUninstallStr   "DisplayIcon"     "$NSISDIR/contrib/graphics/icons/win-uninstall.ico"
+          setUninstallStr   "InstallLocation" "$INSTDIR"
+          setUninstallStr   "Readme"          "https://github.com/fpco/minghc/blob/master/README.md"
+          setUninstallStr   "DisplayVersion"  (fromString $ defaultVersion GHC)
+          setUninstallDWORD "NoModify"        1
+          setUninstallDWORD "NoRepair"        1
+
 
 showArchAbbr :: Arch -> String
 showArchAbbr Arch32 = "32"
