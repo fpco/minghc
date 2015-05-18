@@ -21,7 +21,9 @@ installer arch version = nsis $ do
     outFile "minghc-$GHC-$ARCH.exe"
     -- See: http://stackoverflow.com/questions/1831810/is-appdata-now-the-correct-place-to-install-user-specific-apps-which-modify-t/1845459#1845459
     installDir "$LOCALAPPDATA/Programs/minghc-$GHC-$ARCH"
-    uninstallIcon "$NSISDIR/contrib/graphics/icons/win-uninstall.ico"
+
+    installIcon   "$NSISDIR/Contrib/Graphics/Icons/orange-install.ico"
+    uninstallIcon "$NSISDIR/Contrib/Graphics/Icons/orange-uninstall.ico"
 
     page Components
     page Directory
@@ -102,7 +104,7 @@ installer arch version = nsis $ do
           -- See possible settings here: http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
           setUninstallStr   "DisplayName"     "$APPNAME"
           setUninstallStr   "UninstallString" ("$INSTDIR/" & uninstaller)
-          setUninstallStr   "DisplayIcon"     "$NSISDIR/contrib/graphics/icons/win-uninstall.ico"
+          setUninstallStr   "DisplayIcon"     ("$INSTDIR/" & uninstaller)
           setUninstallStr   "InstallLocation" "$INSTDIR"
           setUninstallStr   "Readme"          "https://github.com/fpco/minghc/blob/master/README.md"
           setUninstallStr   "DisplayVersion"  (fromString $ defaultVersion GHC)
