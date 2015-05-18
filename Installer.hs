@@ -95,21 +95,21 @@ installer arch version = nsis $ do
                 ,[majorVersion (version GHC), showArchAbbr arch]]
 
         buildUninstaller uninstallRegKey = do
-          let uninstaller = "uninstall.exe"
-          writeUninstaller uninstaller
+            let uninstaller = "uninstall.exe"
+            writeUninstaller uninstaller
 
-          let setUninstallStr   = uncurry writeRegStr   uninstallRegKey
-          let setUninstallDWORD = uncurry writeRegDWORD uninstallRegKey
+            let setUninstallStr   = uncurry writeRegStr   uninstallRegKey
+            let setUninstallDWORD = uncurry writeRegDWORD uninstallRegKey
 
-          -- See possible settings here: http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
-          setUninstallStr   "DisplayName"     "$APPNAME"
-          setUninstallStr   "UninstallString" ("$INSTDIR/" & uninstaller)
-          setUninstallStr   "DisplayIcon"     ("$INSTDIR/" & uninstaller)
-          setUninstallStr   "InstallLocation" "$INSTDIR"
-          setUninstallStr   "Readme"          "https://github.com/fpco/minghc/blob/master/README.md"
-          setUninstallStr   "DisplayVersion"  (fromString $ defaultVersion GHC)
-          setUninstallDWORD "NoModify"        1
-          setUninstallDWORD "NoRepair"        1
+            -- See possible settings here: http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
+            setUninstallStr   "DisplayName"     "$APPNAME"
+            setUninstallStr   "UninstallString" ("$INSTDIR/" & uninstaller)
+            setUninstallStr   "DisplayIcon"     ("$INSTDIR/" & uninstaller)
+            setUninstallStr   "InstallLocation" "$INSTDIR"
+            setUninstallStr   "Readme"          "https://github.com/fpco/minghc/blob/master/README.md"
+            setUninstallStr   "DisplayVersion"  (fromString $ version GHC)
+            setUninstallDWORD "NoModify"        1
+            setUninstallDWORD "NoRepair"        1
 
 
 showArchAbbr :: Arch -> String
