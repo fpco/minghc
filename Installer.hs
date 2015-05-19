@@ -70,9 +70,6 @@ installer arch version = nsis $ do
             ["ghc --version"]
 
     section "Add programs to PATH" [Description "Put GHC, Cabal, and PortableGit on the %PATH%"] $ do
-        -- Should use HKLM instead of HKCU for all but APPDATA.
-        -- However, we need to ensure that the APPDATA path comes first.
-        -- And this is the only way I could make that happen.
         mapM_ (setEnvVarPrepend HKCU "PATH") path
 
     section "Add switcher to PATH" [Description "Put minghc-$GHC.bat on the %PATH%, which puts the other programs on the %PATH%"] $ do
