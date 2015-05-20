@@ -10,8 +10,8 @@ import Development.NSIS as NSIS
 import Development.NSIS.Plugins.EnvVarUpdate
 
 
-installer :: Arch -> (Program -> Version) -> String
-installer arch version = nsis $ do
+installer :: FilePath -> Arch -> (Program -> Version) -> String
+installer projRoot arch version = nsis $ do
     forM_ [minBound..maxBound] $ \prog ->
         constantStr (upper $ show prog) (fromString $ version prog)
     constantStr "ARCH"    (fromString $ showArch arch)
@@ -22,8 +22,8 @@ installer arch version = nsis $ do
     -- See: http://stackoverflow.com/questions/1831810/is-appdata-now-the-correct-place-to-install-user-specific-apps-which-modify-t/1845459#1845459
     installDir "$LOCALAPPDATA/Programs/minghc-$GHC-$ARCH"
 
-    installIcon   "$NSISDIR/Contrib/Graphics/Icons/orange-install.ico"
-    uninstallIcon "$NSISDIR/Contrib/Graphics/Icons/orange-uninstall.ico"
+    installIcon   $ fromString projRoot & "/ico/minghc-install.ico"
+    uninstallIcon $ fromString projRoot & "/ico/minghc-uninstall.ico"
 
     page Components
     page Directory
