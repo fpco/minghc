@@ -7,6 +7,7 @@ import Development.Shake.FilePath
 import Control.Exception.Extra
 import System.Console.GetOpt
 import Data.List.Extra
+import System.Directory (getCurrentDirectory)
 import System.Directory.Extra as D
 import Installer
 import Config
@@ -36,7 +37,7 @@ replaceDir src dest = do
 main :: IO ()
 main = do
     man <- newManager tlsManagerSettings
-
+    projRoot <- getCurrentDirectory
     replaceDir "bin" ".build/bin/bin"
 
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
@@ -79,5 +80,5 @@ main = do
 
         "minghc-*.nsi" %> \out -> do
             need ["../Installer.hs","../Config.hs"]
-            writeFile' out $ installer arch $
+            writeFile' out $ installer projRoot arch $
                 \prog -> if prog == GHC then extractVersion out else defaultVersion prog
