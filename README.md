@@ -46,6 +46,6 @@ Users of the installer have no need to build it, these are mostly notes for deve
 * Make sure you have copies of `tar`, `wget`, `bunzip`, `gzip`, and `7z` on your `%PATH%`. For `tar`, a version of BSD Tar is recommended.
     * For convenience, consider using the [minimal dependency bundle](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghcdeps-bin.zip), which includes all the necessary tools.
     * [GNU on Windows (GOW)](https://github.com/bmatzelle/gow) is a heavier option.
-* Run `cabal install`.
-* Run `minghc-generate`. That will generate a file `.build/minghc-7.10.1.exe`.
-* To build for other versions of GHC, pass the version on the command line, for example `minghc-generate 7.6.3`.
+* Run `cabal install --only-dependencies`.
+* Run `cabal run`. That will generate a file `.build/minghc-7.10.1.exe`.
+* To build for other versions of GHC, pass the version on the command line, for example `cabal run -- 7.8.4`.
