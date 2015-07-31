@@ -22,7 +22,7 @@ type Version = String
 
 defaultVersion :: Program -> Version
 -- Latest released versions of all
-defaultVersion GHC = "7.10.1"
+defaultVersion GHC = "7.10.2"
 defaultVersion Git = "2.4.0.1"
 
 source :: Arch -> Program -> Version -> String
