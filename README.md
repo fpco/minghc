@@ -36,14 +36,33 @@ _Caveats:_
 
 There are two existing ways to get GHC on Windows, straight from the [GHC distribution](https://www.haskell.org/ghc/) and using the [Haskell Platform](https://www.haskell.org/platform/). The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
 
-## Building the Installer
+## Building
 
-Users of the installer have no need to build it, these are mostly notes for developers of the installer. To build one of the installers:
+Users of MinGHC installers do not need to build it themselves. Below are instructions for anyone who wants to contribute to future installers.
 
-* Download [NSIS](http://nsis.sourceforge.net/) and put it on your `%PATH%`.
-* Make sure you have copies of `tar`, `wget`, `bunzip`, `gzip`, and `7z` on your `%PATH%`. For `tar`, a version of BSD Tar is recommended.
-    * For convenience, consider using the [minimal dependency bundle](https://s3.amazonaws.com/download.fpcomplete.com/minghc/minghcdeps-bin.zip), which includes all the necessary tools.
-    * [GNU on Windows (GOW)](https://github.com/bmatzelle/gow) is a heavier option.
-* Run `cabal install --only-dependencies`.
-* Run `cabal run`. That will generate a file `.build/minghc-7.10.1.exe`.
-* To build for other versions of GHC, pass the version on the command line, for example `cabal run -- 7.8.4`.
+### System Dependencies
+
+You need NSIS installed:
+
+* Download [NSIS 3.0b1](http://nsis.sourceforge.net/), install it, and place the installation directory on your `PATH`.
+* Patch NSIS with the [large strings build for 3.0b1](http://prdownloads.sourceforge.net/nsis/nsis-3.0b1-strlen_8192.zip?download)
+  found among its [special builds](http://nsis.sourceforge.net/Special_Builds). (The patch is applied by copying
+  the files in the patch archive over top the NSIS installation.)
+
+### Building Installers
+
+Creating installers requires a two-step process: 1) build the installer-generation script and then 2) run the script
+to create installers.
+
+  1. To build the installer-generation script, run `stack build`.
+  2. To execute the installer generator, run `stack exec minghc-generate`.
+
+By default, the installer generator will create an installer for the most recent GHC release (32-bit).
+You can build installers for other official releases by providing a version number and possibly `--arch64` to use 64-bit
+GHC.
+
+For example, the following will build an older release as 64-bit.
+
+    > stack exec minghc-generate -- 7.8.4 --arch64
+
+The resulting installer can be found in the `.build` directory.
