@@ -1,0 +1,6 @@
+extra-deps:
+- nsis-0.3
+resolver: lts-2.20
+flags: {}
+packages:
+- '.'
