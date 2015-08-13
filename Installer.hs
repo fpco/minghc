@@ -54,11 +54,7 @@ installer projRoot arch version = nsis $ do
         file [Recursive] "bin/7z.*"
         file [Recursive] "bin/minghc-post-install.exe.7z"
         file [Recursive] "bin/all-*"
-        let shortArch =
-                case arch of
-                    Arch32 -> "32"
-                    Arch64 -> "64"
-        file [Recursive] $ fromString $ concat ["bin/", shortArch, "-*"]
+        file [Recursive] $ fromString $ concat ["bin/", showArchAbbr arch, "-*"]
 
         execWait "\"$INSTDIR/bin/7z.exe\" x -y \"-o$INSTDIR/bin\" \"$INSTDIR/bin/minghc-post-install.exe.7z\""
         NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe.7z"

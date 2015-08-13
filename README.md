@@ -44,9 +44,9 @@ Users of MinGHC installers do not need to build it themselves. Below are instruc
 
 You need NSIS installed:
 
-* Download [NSIS 3.0b1](http://nsis.sourceforge.net/), install it, and place the installation directory on your `PATH`.
-* Patch NSIS with the [large strings build for 3.0b1](http://prdownloads.sourceforge.net/nsis/nsis-3.0b1-strlen_8192.zip?download)
-  found among its [special builds](http://nsis.sourceforge.net/Special_Builds). (The patch is applied by copying
+* Download [NSIS 3.0b2](http://nsis.sourceforge.net/), install it, and place the installation directory on your `PATH`.
+* Patch NSIS with the **large strings build for 3.0b2** found among its
+  [special builds](http://nsis.sourceforge.net/Special_Builds). (The patch is applied by copying
   the files in the patch archive over top the NSIS installation.)
 
 ### Building Installers
