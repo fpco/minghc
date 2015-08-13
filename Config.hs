@@ -23,12 +23,12 @@ type Version = String
 defaultVersion :: Program -> Version
 -- Latest released versions of all
 defaultVersion GHC = "7.10.2"
-defaultVersion Git = "2.4.0.1"
+defaultVersion Git = "2.4.5.1"
 
 source :: Arch -> Program -> Version -> String
 -- Official GHC release, available in xv and bz2, but the xv one is harder to extract on Windows systems
 source arch GHC ver = "https://www.haskell.org/ghc/dist/" ++ ver ++ "/ghc-" ++ ver ++ "-" ++ showArch arch ++ "-unknown-mingw32.tar.xz"
-source _ Git "2.4.0.1" = "https://github.com/git-for-windows/git/releases/download/v2.4.0.windows.1/PortableGit-2.4.0.1-dev-preview-32-bit.7z.exe"
+source _ Git "2.4.5.1" = "https://github.com/git-for-windows/git/releases/download/v2.4.5.windows.1/PortableGit-2.4.5.1-4th-release-candidate-32-bit.7z.exe"
 
 dest :: Version -- ^ GHC version
      -> Arch
