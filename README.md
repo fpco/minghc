@@ -1,10 +1,31 @@
+# stack
+
+For most use cases, we recommend [you download and use
+stack](https://github.com/commercialhaskell/stack/wiki/Downloads#windows)
+instead of proceeding with MinGHC. The MinGHC approach to installing both GHC
+and MSYS has been adopted by stack, and stack provides some additional
+benefits:
+
+* Easier to upgrade to newer GHC versions
+* Support for working with multiple GHC versions without switching environments
+* Simple upgrade procedure for stack itself
+* Less PATH variable contamination
+
+For more information on using stack, please [read the stack
+guide](https://github.com/commercialhaskell/stack/blob/master/GUIDE.md).
+
+MinGHC is still a supported and active project, and makes sense for people
+looking for network-free installers for a Haskell toolchain. For more
+information, see [issue #75](https://github.com/fpco/minghc/issues/75).
+
 # Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
 This project provides a Windows installer with:
 
 * [GHC](https://www.haskell.org/ghc/), so you can write Haskell code.
-* [Cabal](https://www.haskell.org/cabal/), so you can install Haskell packages.
+* [stack](https://github.com/commercialhaskell/stack#readme), a modern build tool for Haskell.
 * [MSYS](http://www.mingw.org/wiki/MSYS), so packages with configure scripts (notably [network](https://hackage.haskell.org/package/network)) compile.
+* [Cabal](https://www.haskell.org/cabal/), an older but still commonly used Haskell build tool.
 
 It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.  Some require [installing c libraries](docs/InstallingCLibs.md).
 
