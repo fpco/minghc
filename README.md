@@ -1,4 +1,6 @@
-# stack
+# Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
+
+## stack
 
 For most use cases, we recommend [you download and use
 stack](https://github.com/commercialhaskell/stack/wiki/Downloads#windows)
@@ -14,11 +16,11 @@ benefits:
 For more information on using stack, please [read the stack
 guide](https://github.com/commercialhaskell/stack/blob/master/GUIDE.md).
 
+## MinGHC
+
 MinGHC is still a supported and active project, and makes sense for people
 looking for network-free installers for a Haskell toolchain. For more
 information, see [issue #75](https://github.com/fpco/minghc/issues/75).
-
-# Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
 This project provides a Windows installer with:
 
