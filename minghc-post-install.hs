@@ -54,7 +54,7 @@ un7z :: FilePath -- ^ dest path
 un7z destPath sevenz =
     go
   where
-    exts = [".7z", ".xz", ".tar"]
+    exts = [".7z", ".xz", ".tar", ".zip"]
     go fp = when (ext `elem` exts) $ do
         putStrLn $ "Decompressing " ++ fp ++ " to " ++ destPath
         ec <- rawSystem sevenz
@@ -68,12 +68,6 @@ un7z destPath sevenz =
             $ error $ "Could not decompress: " ++ fp
       where
         ext = takeExtension fp
-
-        toUn7z = ext `elem`
-            [ ".7z"
-            , ".tar"
-            , ".xz"
-            ]
 
 removeOldCabal :: FilePath -- ^ new cabal
                -> IO ()
