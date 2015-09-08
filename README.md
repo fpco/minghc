@@ -1,19 +1,19 @@
 # Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
-## stack
+## Wait, are you sure you don't want `stack`?
 
-For most use cases, we recommend [you download and use
-stack](https://github.com/commercialhaskell/stack/wiki/Downloads#windows)
+For most use cases we actually recommend [you download and use
+`stack`](https://github.com/commercialhaskell/stack/wiki/Downloads#windows)
 instead of proceeding with MinGHC. The MinGHC approach to installing both GHC
-and MSYS has been adopted by stack, and stack provides some additional
+and MSYS has been adopted by `stack` and `stack` provides some additional
 benefits:
 
 * Easier to upgrade to newer GHC versions
 * Support for working with multiple GHC versions without switching environments
-* Simple upgrade procedure for stack itself
-* Less PATH variable contamination
+* Simple upgrade procedure for `stack` itself
+* Isolated environment that avoids contaminating your `PATH` variable
 
-For more information on using stack, please [read the stack
+For more information on using `stack`, please [read the `stack`
 guide](https://github.com/commercialhaskell/stack/blob/master/GUIDE.md).
 
 ## MinGHC
