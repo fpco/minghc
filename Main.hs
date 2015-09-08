@@ -7,6 +7,7 @@ import Development.Shake.FilePath
 import Control.Exception.Extra
 import System.Console.GetOpt
 import Data.List.Extra
+import Data.Maybe
 import System.Directory (getCurrentDirectory)
 import System.Directory.Extra as D
 import Installer
@@ -17,9 +18,12 @@ import System.IO
 import qualified Data.ByteString as S
 import Control.Monad
 
-data Flags = Flag64 deriving Eq
+data Flags = Flag64
+           | FlagStack (Maybe String)
+ deriving Eq
 flags =
     [ Option "" ["arch64"] (NoArg $ Right Flag64) "Use 64-bit GHC."
+    , Option "" ["stack"] (OptArg (Right . FlagStack) "VERSION") "Specify stack version."
     ]
 
 replaceDir :: FilePath -> FilePath -> IO ()
@@ -42,6 +46,8 @@ main = do
 
     withCurrentDirectory ".build" $ shakeArgsWith shakeOptions flags $ \flags ver -> return $ Just $ do
         let arch = if Flag64 `elem` flags then Arch64 else Arch32
+            stackVer = fromMaybe (defaultVersion Stack) $ listToMaybe
+                [ver | FlagStack (Just ver) <- flags]
         want ["minghc-" ++ v ++ "-" ++ showArch arch ++ ".exe" | v <- if null ver then [defaultVersion GHC] else ver]
 
         let fetch from to = liftIO $ do
@@ -81,7 +87,7 @@ main = do
 
         let getVer ghcVer GHC = ghcVer
             getVer _ Git = defaultVersion Git
-            getVer _ Stack = defaultVersion Stack -- FIXME
+            getVer _ Stack = stackVer
 
         "minghc-*.exe" %> \out -> do
             let ghcVer = extractVersion out
