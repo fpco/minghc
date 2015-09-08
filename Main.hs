@@ -60,6 +60,7 @@ main = do
                 renameFile tmp to
         "ghc-*.tar.xz" %> \out -> fetch (source arch GHC $ extractVersion out) out
         "git-*.7z" %> \out -> fetch (source arch Git $ extractVersion out) out
+        "bin/bin/stack-*.zip" %> \out -> fetch (source arch Stack $ extractVersion out) out
 
         ".ghc-*" %> \out -> do
             let ver = extractVersion out
@@ -72,13 +73,22 @@ main = do
             writeFile' out ""
             need ["PortableGit-" ++ ver ++ ".7z.exe"]
 
+        ".stack-*" %> \out -> do
+            let ver = extractVersion out
+                verarch = ver ++ "-" ++ showArch arch
+            writeFile' out ""
+            need ["bin/bin/stack-" ++ verarch ++ ".zip"]
+
+        let getVer ghcVer GHC = ghcVer
+            getVer _ Git = defaultVersion Git
+            getVer _ Stack = defaultVersion Stack -- FIXME
+
         "minghc-*.exe" %> \out -> do
             let ghcVer = extractVersion out
             need ["../Config.hs", "../Main.hs", out -<.> "nsi"]
-            need $ map (dest ghcVer arch) [minBound..maxBound]
+            need $ map (\p -> dest (getVer ghcVer p) arch p) [minBound..maxBound]
             cmd "makensis -V3" [out -<.> "nsi"]
 
         "minghc-*.nsi" %> \out -> do
             need ["../Installer.hs","../Config.hs"]
-            writeFile' out $ installer projRoot arch $
-                \prog -> if prog == GHC then extractVersion out else defaultVersion prog
+            writeFile' out $ installer projRoot arch $ getVer $ extractVersion out

@@ -49,12 +49,19 @@ installer projRoot arch version = nsis $ do
         setOutPath "$INSTDIR"
         buildUninstaller uninstallRegKey
 
-        let rootArchives = map (dest "$GHC" arch) [minBound..maxBound]
+        let rootArchives = map (\p -> dest (version p) arch p) [GHC, Git]
         mapM_ (file [] . fromString) rootArchives
         file [Recursive] "bin/7z.*"
         file [Recursive] "bin/minghc-post-install.exe.7z"
         file [Recursive] "bin/all-*"
-        file [Recursive] $ fromString $ concat ["bin/", showArchAbbr arch, "-*"]
+        --file [Recursive] $ fromString $ concat ["bin/", showArchAbbr arch, "-*"]
+        file [Recursive] $ fromString $ concat
+            [ "bin/stack-"
+            , version Stack
+            , "-"
+            , showArch arch
+            , ".zip"
+            ]
 
         execWait "\"$INSTDIR/bin/7z.exe\" x -y \"-o$INSTDIR/bin\" \"$INSTDIR/bin/minghc-post-install.exe.7z\""
         NSIS.delete [] "$INSTDIR/bin/minghc-post-install.exe.7z"
