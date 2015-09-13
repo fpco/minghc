@@ -16,6 +16,13 @@ benefits:
 For more information on using `stack`, please [read the `stack`
 guide](https://github.com/commercialhaskell/stack/blob/master/GUIDE.md).
 
+One note: when using stack, you need to make a few changes to how you
+call some tools outside of a project:
+
+* `stack ghc -- ...` to compile files
+* `stack runghc -- ...` to interpret files
+* `stack exec -- ...` to run arbitrary commands
+
 ## MinGHC
 
 MinGHC is still a supported and active project, and makes sense for people
