@@ -1,10 +1,40 @@
 # Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
+## Wait, are you sure you don't want `stack`?
+
+For most use cases we actually recommend [you download and use
+`stack`](https://github.com/commercialhaskell/stack/wiki/Downloads#windows)
+instead of proceeding with MinGHC. The MinGHC approach to installing both GHC
+and MSYS has been adopted by `stack` and `stack` provides some additional
+benefits:
+
+* Easier to upgrade to newer GHC versions
+* Support for working with multiple GHC versions without switching environments
+* Simple upgrade procedure for `stack` itself
+* Isolated environment that avoids contaminating your `PATH` variable
+
+For more information on using `stack`, please [read the `stack`
+guide](https://github.com/commercialhaskell/stack/blob/master/GUIDE.md).
+
+One note: when using stack, you need to make a few changes to how you
+call some tools outside of a project:
+
+* `stack ghc -- ...` to compile files
+* `stack runghc -- ...` to interpret files
+* `stack exec -- ...` to run arbitrary commands
+
+## MinGHC
+
+MinGHC is still a supported and active project, and makes sense for people
+looking for network-free installers for a Haskell toolchain. For more
+information, see [issue #75](https://github.com/fpco/minghc/issues/75).
+
 This project provides a Windows installer with:
 
 * [GHC](https://www.haskell.org/ghc/), so you can write Haskell code.
-* [Cabal](https://www.haskell.org/cabal/), so you can install Haskell packages.
+* [stack](https://github.com/commercialhaskell/stack#readme), a modern build tool for Haskell.
 * [MSYS](http://www.mingw.org/wiki/MSYS), so packages with configure scripts (notably [network](https://hackage.haskell.org/package/network)) compile.
+* [Cabal](https://www.haskell.org/cabal/), an older but still commonly used Haskell build tool.
 
 It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.  Some require [installing c libraries](docs/InstallingCLibs.md).
 
