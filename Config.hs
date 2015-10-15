@@ -24,7 +24,7 @@ defaultVersion :: Program -> Version
 -- Latest released versions of all
 defaultVersion GHC = "7.10.2"
 defaultVersion Git = "2.4.5.1"
-defaultVersion Stack = "0.1.5.0"
+defaultVersion Stack = "0.1.6.0"
 
 source :: Arch -> Program -> Version -> String
 -- Official GHC release, available in xv and bz2, but the xv one is harder to extract on Windows systems
@@ -35,9 +35,9 @@ source arch Stack ver = concat
     , ver
     , "/stack-"
     , ver
-    , "-"
+    , "-windows-"
     , showArch arch
-    , "-windows.zip"
+    , ".zip"
     ]
 
 dest :: Version
