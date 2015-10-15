@@ -1,6 +1,7 @@
 -- Note: we should only depend on libraries that ship with GHC for this. No
 -- external dependencies!
 import           Control.Monad                (when)
+import           Data.List                    (concat, isPrefixOf)
 import           Data.Version                 (Version, parseVersion)
 import           Prelude                      (Bool (..), FilePath, elem, error,
                                                filter, fmap, getLine, lines,
@@ -14,7 +15,7 @@ import           System.Directory             (doesFileExist,
 import           System.Environment           (getArgs, getExecutablePath)
 import           System.Exit                  (ExitCode (ExitSuccess))
 import           System.FilePath              (splitExtension, takeDirectory,
-                                               takeExtension, (</>))
+                                               takeExtension, takeFileName, (</>))
 import           System.IO                    (IO, hFlush, stdout)
 import           System.Process               (rawSystem, readProcess)
 import           Text.ParserCombinators.ReadP (readP_to_S)
@@ -58,11 +59,11 @@ un7z destPath sevenz =
     go fp = when (ext `elem` exts) $ do
         putStrLn $ "Decompressing " ++ fp ++ " to " ++ destPath
         ec <- rawSystem sevenz
-            [ "x"
-            , "-o" ++ destPath
-            , "-y"
-            , fp
-            ]
+            (concat [ [ "x"
+                      , "-o" ++ destPath
+                      , "-y"
+                      , fp ]
+                    , [ "stack.exe" | "stack-" `isPrefixOf` (takeFileName fp) ]])
         removeFile fp
         when (ec /= ExitSuccess)
             $ error $ "Could not decompress: " ++ fp
