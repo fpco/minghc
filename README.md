@@ -3,7 +3,7 @@
 ## Wait, are you sure you don't want `stack`?
 
 For most use cases we actually recommend [you download and use
-`stack`](https://github.com/commercialhaskell/stack/wiki/Downloads#windows)
+`stack`](https://github.com/commercialhaskell/stack/blob/master/doc/install_and_upgrade.md)
 instead of proceeding with MinGHC. The MinGHC approach to installing both GHC
 and MSYS has been adopted by `stack` and `stack` provides some additional
 benefits:
@@ -14,7 +14,7 @@ benefits:
 * Isolated environment that avoids contaminating your `PATH` variable
 
 For more information on using `stack`, please [read the `stack`
-guide](https://github.com/commercialhaskell/stack/blob/master/GUIDE.md).
+guide](https://github.com/commercialhaskell/stack/tree/master/doc/GUIDE.md).
 
 One note: when using stack, you need to make a few changes to how you
 call some tools outside of a project:
