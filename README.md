@@ -1,22 +1,22 @@
 # Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
-## Wait, are you sure you don't want `stack`?
+## Wait, are you sure you don't want Stack?
 
 For most use cases we actually recommend [you download and use
-`stack`](https://github.com/commercialhaskell/stack/blob/master/doc/install_and_upgrade.md)
+Stack](https://github.com/commercialhaskell/stack/blob/release/doc/install_and_upgrade.md)
 instead of proceeding with MinGHC. The MinGHC approach to installing both GHC
-and MSYS has been adopted by `stack` and `stack` provides some additional
+and MSYS has been adopted by Stack and Stack provides some additional
 benefits:
 
 * Easier to upgrade to newer GHC versions
 * Support for working with multiple GHC versions without switching environments
-* Simple upgrade procedure for `stack` itself
+* Simple upgrade procedure for Stack itself
 * Isolated environment that avoids contaminating your `PATH` variable
 
-For more information on using `stack`, please [read the `stack`
-guide](https://github.com/commercialhaskell/stack/tree/master/doc/GUIDE.md).
+For more information on using Stack, please [read the Stack
+guide](https://github.com/commercialhaskell/stack/tree/release/doc/GUIDE.md).
 
-One note: when using stack, you need to make a few changes to how you
+One note: when using Stack, you need to make a few changes to how you
 call some tools outside of a project:
 
 * `stack ghc -- ...` to compile files
@@ -32,7 +32,7 @@ information, see [issue #75](https://github.com/fpco/minghc/issues/75).
 This project provides a Windows installer with:
 
 * [GHC](https://www.haskell.org/ghc/), so you can write Haskell code.
-* [stack](https://github.com/commercialhaskell/stack#readme), a modern build tool for Haskell.
+* [Stack](https://github.com/commercialhaskell/stack#readme), a modern build tool for Haskell.
 * [MSYS](http://www.mingw.org/wiki/MSYS), so packages with configure scripts (notably [network](https://hackage.haskell.org/package/network)) compile.
 * [Cabal](https://www.haskell.org/cabal/), an older but still commonly used Haskell build tool.
 
@@ -41,10 +41,10 @@ It _does not_ provide all the packages included with the [Haskell Platform](http
 
 ## Using the Installer
 
-* [**Download installer with GHC 7.10.2 (32-bit)**](https://github.com/fpco/minghc/releases/download/2015-10-15/minghc-7.10.2-i386.exe)
-* [**Download installer with GHC 7.10.2 (64-bit)**](https://github.com/fpco/minghc/releases/download/2015-10-15/minghc-7.10.2-x86_64.exe)
-* [**Download installer with GHC 7.8.4 (32-bit)**](https://github.com/fpco/minghc/releases/download/2015-10-15/minghc-7.8.4-i386.exe)
-* [**Download installer with GHC 7.8.4 (64-bit)**](https://github.com/fpco/minghc/releases/download/2015-10-15/minghc-7.8.4-x86_64.exe)
+* [**Download installer with GHC 7.10.2 (32-bit)**](https://github.com/fpco/minghc/releases/download/2015-11-20/minghc-7.10.2-i386.exe)
+* [**Download installer with GHC 7.10.2 (64-bit)**](https://github.com/fpco/minghc/releases/download/2015-11-20/minghc-7.10.2-x86_64.exe)
+* [**Download installer with GHC 7.8.4 (32-bit)**](https://github.com/fpco/minghc/releases/download/2015-11-20/minghc-7.8.4-i386.exe)
+* [**Download installer with GHC 7.8.4 (64-bit)**](https://github.com/fpco/minghc/releases/download/2015-11-20/minghc-7.8.4-x86_64.exe)
 
 You may wish to also check the [Github latest releases page](https://github.com/fpco/minghc/releases/latest).
 
