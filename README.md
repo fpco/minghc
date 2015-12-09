@@ -1,10 +1,10 @@
 # Minimum GHC Installer [![Build Status](https://img.shields.io/travis/fpco/minghc.svg?style=flat)](https://travis-ci.org/fpco/minghc)
 
-## Wait, are you sure you don't want Stack?
+## MinGHC is dead. Please use Stack.
 
-For most use cases we actually recommend [you download and use
+We  recommend [you download and use
 Stack](https://github.com/commercialhaskell/stack/blob/release/doc/install_and_upgrade.md)
-instead of proceeding with MinGHC. The MinGHC approach to installing both GHC
+instead of using MinGHC - it's what all the MinGHC authors now do. The MinGHC approach to installing both GHC
 and MSYS has been adopted by Stack and Stack provides some additional
 benefits:
 
@@ -23,11 +23,7 @@ call some tools outside of a project:
 * `stack runghc -- ...` to interpret files
 * `stack exec -- ...` to run arbitrary commands
 
-## MinGHC
-
-MinGHC is still a supported and active project, and makes sense for people
-looking for network-free installers for a Haskell toolchain. For more
-information, see [issue #75](https://github.com/fpco/minghc/issues/75).
+## Legacy installers
 
 This project provides a Windows installer with:
 
