@@ -4,7 +4,7 @@
 
 We  recommend [you download and use
 Stack](https://github.com/commercialhaskell/stack/blob/release/doc/install_and_upgrade.md)
-instead of using MinGHC - it's what all the MinGHC authors now do. The MinGHC approach to installing both GHC
+instead of using MinGHC - it's what all the MinGHC authors do. The MinGHC approach to installing both GHC
 and MSYS has been adopted by Stack and Stack provides some additional
 benefits:
 
@@ -23,7 +23,7 @@ call some tools outside of a project:
 * `stack runghc -- ...` to interpret files
 * `stack exec -- ...` to run arbitrary commands
 
-## Legacy installers
+## Legacy MinGHC installers
 
 This project provides a Windows installer with:
 
