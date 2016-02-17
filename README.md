@@ -35,7 +35,7 @@ This project provides a Windows installer with:
 It _does not_ provide all the packages included with the [Haskell Platform](https://www.haskell.org/platform/), but it _does_ provide an environment where you can install those packages.  Some require [installing c libraries](docs/InstallingCLibs.md).
 
 
-## Using the Installer
+## Using the Legacy Installer
 
 * [**Download installer with GHC 7.10.2 (32-bit)**](https://github.com/fpco/minghc/releases/download/2015-12-04/minghc-7.10.2-i386.exe)
 * [**Download installer with GHC 7.10.2 (64-bit)**](https://github.com/fpco/minghc/releases/download/2015-12-04/minghc-7.10.2-x86_64.exe)
@@ -60,7 +60,7 @@ _Caveats:_
 
 ## Motivation
 
-There are two existing ways to get GHC on Windows, straight from the [GHC distribution](https://www.haskell.org/ghc/) and using the [Haskell Platform](https://www.haskell.org/platform/). The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
+Before [stack](haskellstack.org), there were two ways to get GHC on Windows, straight from the [GHC distribution](https://www.haskell.org/ghc/) and using the [Haskell Platform](https://www.haskell.org/platform/). The GHC distribution is hard to unpack (`.xv` files are not Windows friendly), doesn't setup the `%PATH%`, lacks Cabal and cannot build the `network` library on its own. The Haskell Platform is easy to install and comes with more libraries, but still won't build the `network` library and usually lags the GHC release by months. This installer is the GHC distribution with all the issues above fixed.
 
 ## Building
 
